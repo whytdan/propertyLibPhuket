@@ -5,7 +5,7 @@ import { Resource, Database } from '@adminjs/mongoose';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../swagger.json';
+import swaggerDocument from '../swagger.json' assert { type: 'json' };
 import { RealEstate } from './models/RealEstate.js';
 import realEstatesRouter from './routes/realEstates.js';
 
