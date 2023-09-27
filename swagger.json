@@ -1,0 +1,184 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Property Library Phuket",
+    "description": "API for Real Estate Properties in Phuket",
+    "version": "1.0"
+  },
+  "produces": ["application/json"],
+  "paths": {
+    "/realEstates": {
+      "get": {
+        "x-swagger-router-controller": "home",
+        "operationId": "index",
+        "tags": ["Real Estates"],
+        "summary": "Fetch real estate properties",
+        "description": "Retrieve a list of real estate properties. The results can be filtered and paginated using query parameters.",
+        "parameters": [
+          {
+            "name": "price",
+            "in": "query",
+            "description": "Filter by price",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "roomsAmount",
+            "in": "query",
+            "description": "Filter by rooms amount",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "landArea",
+            "in": "query",
+            "description": "Filter by land area",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "kitchenArea",
+            "in": "query",
+            "description": "Filter by kitchen area",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "bathroomAmount",
+            "in": "query",
+            "description": "Filter by bathroom amount",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "buildingType",
+            "in": "query",
+            "description": "Filter by buildingType",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "yearBuilt",
+            "in": "query",
+            "description": "Filter by year built",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "hasRestaraunt",
+            "in": "query",
+            "description": "Filter by hasRestaraunt",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hasParking",
+            "in": "query",
+            "description": "Filter by hasParking",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hasSpa",
+            "in": "query",
+            "description": "Filter by hasSpa",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hasCommunalPool",
+            "in": "query",
+            "description": "Filter by hasCommunalPool",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hasGym",
+            "in": "query",
+            "description": "Filter by hasGym",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "hasClub",
+            "in": "query",
+            "description": "Filter by hasClub",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "description": "Filter by description",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "balconyAmount",
+            "in": "query",
+            "description": "Filter by balcony amount",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "_page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "_limit",
+            "in": "query",
+            "description": "Number of items per page for pagination",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved real estates",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RealEstate"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "RealEstate": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "price": { "type": "number" },
+        "roomsAmount": { "type": "number" },
+        "landArea": { "type": "number" },
+        "builtUpArea": { "type": "number" },
+        "kitchenArea": { "type": "number" },
+        "floor": { "type": "string" },
+        "bathroomAmount": { "type": "number" },
+        "balconyAmount": { "type": "number" },
+        "buildingType": { "type": "string" },
+        "yearBuilt": { "type": "number" },
+        "description": { "type": "string" },
+        "hasRestaraunt": { "type": "boolean" },
+        "hasParking": { "type": "boolean" },
+        "hasSpa": { "type": "boolean" },
+        "hasCommunalPool": { "type": "boolean" },
+        "hasGym": { "type": "boolean" },
+        "hasClub": { "type": "boolean" },
+        "images": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

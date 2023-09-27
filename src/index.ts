@@ -4,8 +4,9 @@ import AdminJSExpress from '@adminjs/express';
 import { Resource, Database } from '@adminjs/mongoose';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../swagger.json';
 import { RealEstate } from './models/RealEstate.js';
-
 import realEstatesRouter from './routes/realEstates.js';
 
 dotenv.config();
@@ -86,6 +87,7 @@ const start = async () => {
   const admin = await initAdminPanel(app);
 
   // routes
+  app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/realEstates', realEstatesRouter);
 
   const PORT = process.env.PORT || 8000;
