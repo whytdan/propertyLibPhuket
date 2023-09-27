@@ -22,7 +22,7 @@ export interface IRealEstate {
   images: string;
 }
 
-const RealEstateSchema = new Schema<IRealEstate>({
+export const RealEstateSchema = new Schema<IRealEstate>({
   title: { type: String, required: true, maxLength: 255 },
   price: { type: Number, required: true },
   roomsAmount: { type: Number },
