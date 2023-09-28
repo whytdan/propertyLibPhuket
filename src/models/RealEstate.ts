@@ -1,6 +1,8 @@
 import { model, Schema } from 'mongoose';
+import { IRealEstateImage, RealEstateImageSchema } from './RealEstateImage.js';
 
 export interface IRealEstate {
+  _id: string;
   title: string;
   price: number;
   roomsAmount: number;
@@ -19,7 +21,7 @@ export interface IRealEstate {
   hasCommunalPool: boolean;
   hasGym: boolean;
   hasClub: boolean;
-  images: string;
+  images: IRealEstateImage[];
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
@@ -41,7 +43,7 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   hasCommunalPool: { type: Boolean, default: false },
   hasGym: { type: Boolean, default: false },
   hasClub: { type: Boolean, default: false },
-  images: [String],
+  images: [RealEstateImageSchema],
 });
 
 export const RealEstate = model<IRealEstate>('RealEstate', RealEstateSchema);

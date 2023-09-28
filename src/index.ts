@@ -1,13 +1,16 @@
 import express, { Application } from 'express';
-import AdminJS from 'adminjs';
+import AdminJS, { AdminJSOptions } from 'adminjs';
 import AdminJSExpress from '@adminjs/express';
 import { Resource, Database } from '@adminjs/mongoose';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 import swaggerDocument from '../swagger.json' assert { type: 'json' };
-import { RealEstate } from './models/RealEstate.js';
+import { componentLoader } from './utils/componentLoader.js';
 import realEstatesRouter from './routes/realEstates.js';
+import { RealEstateResource } from './resources/RealEstateResource.js';
+import { RealEstateImageResource } from './resources/RealEstateImageResource.js';
 
 dotenv.config();
 
@@ -37,8 +40,9 @@ const initDBConnection = async () => {
 };
 
 const initAdminPanel = async (app: Application): Promise<AdminJS> => {
-  const adminOptions = {
-    resources: [RealEstate],
+  const adminOptions: AdminJSOptions = {
+    resources: [RealEstateResource, RealEstateImageResource],
+    componentLoader: componentLoader,
   };
 
   const DEFAULT_ADMIN = {
@@ -82,6 +86,11 @@ const start = async () => {
 
   // app middlewares
   app.use(express.json());
+  app.use(
+    cors({
+      origin: '*',
+    })
+  );
 
   // admin panel initialization
   const admin = await initAdminPanel(app);
@@ -98,6 +107,8 @@ const start = async () => {
       `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
     );
   });
+
+  admin.watch();
 };
 
 start();
