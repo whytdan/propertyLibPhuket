@@ -87,7 +87,7 @@ const start = async () => {
   const admin = await initAdminPanel(app);
 
   // routes
-  app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/realEstates', realEstatesRouter);
 
   const PORT = process.env.PORT || 8000;
