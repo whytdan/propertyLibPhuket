@@ -34,6 +34,7 @@ export const RealEstateResource = {
       hasCommunalPool: { type: 'boolean' },
       hasGym: { type: 'boolean' },
       hasClub: { type: 'boolean' },
+      location: { type: 'string' },
     },
   },
   features: [
