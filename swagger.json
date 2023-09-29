@@ -107,6 +107,13 @@
             "type": "boolean"
           },
           {
+            "name": "location",
+            "in": "query",
+            "description": "Filter by location",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "description",
             "in": "query",
             "description": "Filter by description",
