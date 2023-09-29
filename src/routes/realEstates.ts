@@ -1,9 +1,17 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import {
   RealEstate,
   RealEstateSchema,
   IRealEstate,
 } from '../models/RealEstate.js';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
+dotenv.config();
+
+const s3ClientParams = { region: process.env.AWS_REGION };
+const s3Client = new S3Client(s3ClientParams);
 
 const router = express.Router();
 
@@ -33,7 +41,29 @@ router.get('/', async function (req, res) {
     const limit = parseInt(req.query._limit as string) || 10;
     const skip = (page - 1) * limit;
     const realEstates = await RealEstate.find(query).skip(skip).limit(limit);
-    res.json(realEstates);
+
+    const realEstatesWithDecryptedImagesPromises = realEstates.map(
+      async (realEstate) => {
+        const mainImageParams = {
+          Bucket: realEstate.mainImage.bucket,
+          Key: realEstate.mainImage.s3Key,
+        };
+
+        const command = new GetObjectCommand(mainImageParams);
+        const url = await getSignedUrl(s3Client, command);
+
+        return {
+          ...realEstate.toObject(),
+          mainImage: url,
+        };
+      }
+    );
+
+    const realEstatesWithDecryptedImages = await Promise.all(
+      realEstatesWithDecryptedImagesPromises
+    );
+
+    res.json(realEstatesWithDecryptedImages);
   } catch (error) {
     console.error(`error in realEstates: ${error}`);
     res.status(500).json({ error: 'Internal Server Error' });
