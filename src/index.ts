@@ -10,7 +10,6 @@ import swaggerDocument from '../swagger.json' assert { type: 'json' };
 import { componentLoader } from './utils/componentLoader.js';
 import realEstatesRouter from './routes/realEstates.js';
 import { RealEstateResource } from './resources/RealEstateResource.js';
-import { RealEstateImageResource } from './resources/RealEstateImageResource.js';
 
 dotenv.config();
 
@@ -41,7 +40,7 @@ const initDBConnection = async () => {
 
 const initAdminPanel = async (app: Application): Promise<AdminJS> => {
   const adminOptions: AdminJSOptions = {
-    resources: [RealEstateResource, RealEstateImageResource],
+    resources: [RealEstateResource],
     componentLoader: componentLoader,
   };
 
