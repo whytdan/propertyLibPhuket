@@ -21,6 +21,7 @@ export interface IRealEstate {
   hasCommunalPool: boolean;
   hasGym: boolean;
   hasClub: boolean;
+  isRent: boolean;
   location: string;
   mainImage: IFile;
   images: IFiles;
@@ -45,6 +46,7 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   hasCommunalPool: { type: Boolean, default: false },
   hasGym: { type: Boolean, default: false },
   hasClub: { type: Boolean, default: false },
+  isRent: { type: Boolean, default: false },
   location: { type: String },
   mainImage: { type: Schema.Types.Mixed },
   images: { type: Schema.Types.Mixed },
