@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { RealEstateImageSchema } from './RealEstateImage.js';
-import { IFile } from 'ts/interfaces.js';
+import { IFile, IFiles } from 'ts/interfaces.js';
 
 export interface IRealEstate {
   _id: string;
@@ -24,6 +23,7 @@ export interface IRealEstate {
   hasClub: boolean;
   location: string;
   mainImage: IFile;
+  images: IFiles;
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
@@ -46,7 +46,8 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   hasGym: { type: Boolean, default: false },
   hasClub: { type: Boolean, default: false },
   location: { type: String },
-  mainImage: RealEstateImageSchema,
+  mainImage: { type: Schema.Types.Mixed },
+  images: { type: Schema.Types.Mixed },
 });
 
 export const RealEstate = model<IRealEstate>('RealEstate', RealEstateSchema);

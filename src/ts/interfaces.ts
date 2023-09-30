@@ -1,6 +1,13 @@
 export interface IFile {
-  s3Key: string;
+  key: string;
   bucket: string;
   mime: string;
-  alt: string | null;
+  size: number;
+}
+
+export interface IFiles {
+  key: string[];
+  bucket: string[];
+  mime: string[];
+  size: number[];
 }

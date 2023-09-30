@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import uploadFileFeature from '@adminjs/upload';
+import uploadFeature from '@adminjs/upload';
 import { RealEstate } from '../models/RealEstate.js';
 import { componentLoader } from '../utils/componentLoader.js';
 
@@ -10,6 +10,71 @@ const AWScredentials = {
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
   region: process.env.AWS_REGION || '',
   bucket: process.env.AWS_BUCKET || '',
+};
+
+type ImagePropertiesType = {
+  [key: string]: {
+    type: 'string' | 'number';
+    isVisible: boolean;
+  };
+};
+
+const imageProperties = (options = {}): ImagePropertiesType =>
+  ({
+    bucket: {
+      type: 'string',
+      isVisible: false,
+      ...options,
+    },
+    mime: {
+      type: 'string',
+      isVisible: false,
+      ...options,
+    },
+    key: {
+      type: 'string',
+      isVisible: false,
+      ...options,
+    },
+    size: {
+      type: 'number',
+      isVisible: false,
+      ...options,
+    },
+  } as const);
+
+const uploadFeatureFor = (name?: string, multiple = false) =>
+  uploadFeature({
+    componentLoader,
+    provider: { aws: AWScredentials },
+    multiple,
+    properties: {
+      file: name ? `${name}.file` : 'file',
+      filePath: name ? `${name}.filePath` : 'filePath',
+      filesToDelete: name ? `${name}.filesToDelete` : 'filesToDelete',
+      key: name ? `${name}.key` : 'key',
+      mimeType: name ? `${name}.mime` : 'mime',
+      bucket: name ? `${name}.bucket` : 'bucket',
+      size: name ? `${name}.size` : 'size',
+    },
+    uploadPath: (record, filename) => {
+      const path = name
+        ? `${record.id()}/${name}/${filename}`
+        : `${record.id()}/global/${filename}`;
+
+      return path;
+    },
+  });
+
+const imagePropertiesFor = (name: string, options = {}) => {
+  const properties = imageProperties(options);
+  return Object.keys(properties).reduce(
+    (memo, key) => ({
+      ...memo,
+      [`${name}.${key}`]: properties[key],
+    }),
+    {}
+  );
 };
 
 export const RealEstateResource = {
@@ -35,17 +100,15 @@ export const RealEstateResource = {
       hasGym: { type: 'boolean' },
       hasClub: { type: 'boolean' },
       location: { type: 'string' },
+      mainImage: {
+        type: 'mixed',
+      },
+      images: {
+        type: 'mixed',
+      },
+      ...imagePropertiesFor('mainImage'),
+      ...imagePropertiesFor('images', { isArray: true }),
     },
   },
-  features: [
-    uploadFileFeature({
-      componentLoader,
-      properties: {
-        key: 'mainImage.s3Key', // to this db field feature will safe S3 key
-        mimeType: 'mainImage.mime', // this property is important because allows to have previews
-        bucket: 'mainImage.bucket', // Field to save the bucket nam
-      },
-      provider: { aws: AWScredentials },
-    }),
-  ],
+  features: [uploadFeatureFor('mainImage'), uploadFeatureFor('images', true)],
 };

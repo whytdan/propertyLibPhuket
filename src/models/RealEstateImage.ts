@@ -2,10 +2,10 @@ import { Schema, model } from 'mongoose';
 import { IFile } from 'ts/interfaces.js';
 
 export const RealEstateImageSchema = new Schema<IFile>({
-  s3Key: { type: Schema.Types.Mixed, required: false },
-  bucket: { type: Schema.Types.Mixed, required: false },
-  mime: { type: Schema.Types.Mixed, required: false },
-  alt: { type: String, default: null },
+  key: { type: String, required: false },
+  bucket: { type: String, required: false },
+  mime: { type: String, required: false },
+  size: { type: Number, required: false },
 });
 
 export const RealEstateImage = model<IFile>(
