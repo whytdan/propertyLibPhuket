@@ -107,6 +107,13 @@
             "type": "boolean"
           },
           {
+            "name": "isRent",
+            "in": "query",
+            "description": "Filter by isRent",
+            "required": false,
+            "type": "boolean"
+          },
+          {
             "name": "location",
             "in": "query",
             "description": "Filter by location",
