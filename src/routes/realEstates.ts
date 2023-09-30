@@ -46,15 +46,43 @@ router.get('/', async function (req, res) {
       async (realEstate) => {
         const mainImageParams = {
           Bucket: realEstate.mainImage.bucket,
-          Key: realEstate.mainImage.s3Key,
+          Key: realEstate.mainImage.key,
         };
 
-        const command = new GetObjectCommand(mainImageParams);
-        const url = await getSignedUrl(s3Client, command);
+        const mainImageCommand = new GetObjectCommand(mainImageParams);
+        const mainImageUrl = await getSignedUrl(s3Client, mainImageCommand);
+
+        const decryptedImagesPromises = realEstate.images.key.map(
+          async (key, index) => {
+            if (key) {
+              const imageParams = {
+                Bucket: process.env.AWS_BUCKET,
+                Key: key,
+              };
+
+              const command = new GetObjectCommand(imageParams);
+              const url = await getSignedUrl(s3Client, command);
+
+              return {
+                url,
+              };
+            } else {
+              return {
+                url: '',
+              };
+            }
+          }
+        );
+
+        const realEstateImages = await Promise.all(decryptedImagesPromises);
 
         return {
           ...realEstate.toObject(),
-          mainImage: url,
+          mainImage: {
+            url: mainImageUrl,
+            // alt: realEstate.mainImage.alt,
+          },
+          images: realEstateImages,
         };
       }
     );
