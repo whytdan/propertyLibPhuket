@@ -18,21 +18,32 @@ const router = express.Router();
 /* GET realEstates listing. */
 router.get('/', async function (req, res) {
   try {
-    const query: Partial<IRealEstate> & { _page?: number; _limit?: number } =
-      {};
+    const query: Partial<IRealEstate> & {
+      _page?: number;
+      _limit?: number;
+      [key: string]: any;
+    } = {};
 
     // Get the list of fields from the schema
     const allowedFields = Object.keys(RealEstateSchema.paths);
 
     // Filter by query parameters
     for (const [key, value] of Object.entries(req.query)) {
-      if (
-        allowedFields.includes(key) &&
-        key !== '_page' &&
-        key !== '_limit' &&
-        typeof value === 'string'
-      ) {
-        (query as any)[key] = value;
+      if (typeof value !== 'string') continue;
+
+      const baseField = key.replace(/_(gte|lte)$/, ''); // Extract base field name
+
+      if (allowedFields.includes(baseField)) {
+        // Check for special filters like _gte and _lte
+        if (key.endsWith('_gte')) {
+          if (!query[baseField]) query[baseField] = {};
+          query[baseField].$gte = value;
+        } else if (key.endsWith('_lte')) {
+          if (!query[baseField]) query[baseField] = {};
+          query[baseField].$lte = value;
+        } else if (key !== '_page' && key !== '_limit') {
+          (query as any)[key] = value;
+        }
       }
     }
 
@@ -99,7 +110,60 @@ router.get('/', async function (req, res) {
 });
 
 /* GET realEstate by id */
-router.get('/:id', function (req, res) {});
+router.get('/:id', async function (req, res) {
+  try {
+    const id = req.params.id; // Extracting ID from route parameters
+
+    // Find real estate record by ID
+    const realEstate = await RealEstate.findById(id);
+
+    if (!realEstate) {
+      // No record found for given ID
+      return res.status(404).json({ error: 'Real estate not found' });
+    }
+
+    // If mainImage exists, get the signed URL
+    let mainImageUrl = '';
+    if (realEstate.mainImage) {
+      const mainImageParams = {
+        Bucket: realEstate.mainImage.bucket,
+        Key: realEstate.mainImage.key,
+      };
+      const mainImageCommand = new GetObjectCommand(mainImageParams);
+      mainImageUrl = await getSignedUrl(s3Client, mainImageCommand);
+    }
+
+    // If other images exist, get their signed URLs
+    const realEstateImages = [];
+    if (realEstate?.images?.key?.length) {
+      for (let key of realEstate.images.key) {
+        const imageParams = {
+          Bucket: process.env.AWS_BUCKET,
+          Key: key,
+        };
+        const command = new GetObjectCommand(imageParams);
+        const url = await getSignedUrl(s3Client, command);
+        realEstateImages.push({ url });
+      }
+    }
+
+    // Construct the response object
+    const responseObj = {
+      ...realEstate.toObject(),
+      mainImage: {
+        url: mainImageUrl,
+      },
+      images: realEstateImages,
+    };
+
+    res.json(responseObj);
+  } catch (error) {
+    console.error(
+      `Error fetching real estate with ID ${req.params.id}: ${error}`
+    );
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 /* POST realEstate creation */
 router.post('/', function (req, res) {});

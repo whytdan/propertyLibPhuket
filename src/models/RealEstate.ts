@@ -5,6 +5,7 @@ export interface IRealEstate {
   _id: string;
   title: string;
   price: number;
+  realEstateType: string;
   roomsAmount: number;
   landArea: number;
   builtUpArea: number;
