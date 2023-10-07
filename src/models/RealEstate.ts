@@ -1,5 +1,6 @@
-import { model, Schema } from 'mongoose';
+import { model, ObjectId, Schema } from 'mongoose';
 import { IFile, IFiles } from 'ts/interfaces.js';
+import { ILocation } from './Locaion.js';
 
 export interface IRealEstate {
   _id: string;
@@ -23,9 +24,10 @@ export interface IRealEstate {
   hasGym: boolean;
   hasClub: boolean;
   isRent: boolean;
-  location: string;
+  location: ILocation | null | ObjectId; // Added this
   mainImage: IFile;
   images: IFiles;
+  isPriorityBuilding: boolean;
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
@@ -48,9 +50,10 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   hasGym: { type: Boolean, default: false },
   hasClub: { type: Boolean, default: false },
   isRent: { type: Boolean, default: false },
-  location: { type: String },
+  location: { type: Schema.Types.ObjectId, ref: 'Location' },
   mainImage: { type: Schema.Types.Mixed },
   images: { type: Schema.Types.Mixed },
+  isPriorityBuilding: { type: Boolean, default: false },
 });
 
 export const RealEstate = model<IRealEstate>('RealEstate', RealEstateSchema);

@@ -7,6 +7,7 @@ import {
 } from '../models/RealEstate.js';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import mongoose from 'mongoose';
 
 dotenv.config();
 
@@ -51,7 +52,10 @@ router.get('/', async function (req, res) {
     const page = parseInt(req.query._page as string) || 1;
     const limit = parseInt(req.query._limit as string) || 10;
     const skip = (page - 1) * limit;
-    const realEstates = await RealEstate.find(query).skip(skip).limit(limit);
+    const realEstates = await RealEstate.find(query)
+      .populate('location')
+      .skip(skip)
+      .limit(limit);
 
     const realEstatesWithDecryptedImagesPromises = realEstates.map(
       async (realEstate) => {
@@ -115,7 +119,7 @@ router.get('/:id', async function (req, res) {
     const id = req.params.id; // Extracting ID from route parameters
 
     // Find real estate record by ID
-    const realEstate = await RealEstate.findById(id);
+    const realEstate = await RealEstate.findById(id).populate('location');
 
     if (!realEstate) {
       // No record found for given ID

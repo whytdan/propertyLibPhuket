@@ -9,7 +9,10 @@ import cors from 'cors';
 import swaggerDocument from '../swagger.json' assert { type: 'json' };
 import { componentLoader } from './utils/componentLoader.js';
 import realEstatesRouter from './routes/realEstates.js';
+import locationsRouter from './routes/locations.js';
+import getAllTopObjectsRouter from './routes/getAllTopObjects.js';
 import { RealEstateResource } from './resources/RealEstateResource.js';
+import { LocationResource } from './resources/LocationResource.js';
 
 dotenv.config();
 
@@ -40,7 +43,7 @@ const initDBConnection = async () => {
 
 const initAdminPanel = async (app: Application): Promise<AdminJS> => {
   const adminOptions: AdminJSOptions = {
-    resources: [RealEstateResource],
+    resources: [RealEstateResource, LocationResource],
     componentLoader: componentLoader,
   };
 
@@ -97,6 +100,8 @@ const start = async () => {
   // routes
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/realEstates', realEstatesRouter);
+  app.use('/locations', locationsRouter);
+  app.use('/getAllTopObjects', getAllTopObjectsRouter);
 
   const PORT = process.env.PORT || 8000;
 

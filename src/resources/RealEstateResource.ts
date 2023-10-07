@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import uploadFeature from '@adminjs/upload';
 import { RealEstate } from '../models/RealEstate.js';
 import { componentLoader } from '../utils/componentLoader.js';
+import { Location } from '../models/Locaion.js';
 
 dotenv.config();
 
@@ -99,15 +100,37 @@ export const RealEstateResource = {
       hasCommunalPool: { type: 'boolean' },
       hasGym: { type: 'boolean' },
       hasClub: { type: 'boolean' },
-      location: { type: 'string' },
+      location: {
+        type: 'reference',
+        target: 'Location', // This should match the model name in Mongoose
+        isRequired: false,
+      },
       mainImage: {
         type: 'mixed',
       },
       images: {
         type: 'mixed',
       },
+      isPriorityBuilding: { type: 'boolean' },
       ...imagePropertiesFor('mainImage'),
       ...imagePropertiesFor('images', { isArray: true }),
+    },
+    populate: {
+      location: {
+        resource: Location,
+      },
+    },
+
+    actions: {
+      show: {
+        populate: ['location'],
+      },
+      edit: {
+        populate: ['location'],
+      },
+      list: {
+        populate: ['location'],
+      },
     },
   },
   features: [uploadFeatureFor('mainImage'), uploadFeatureFor('images', true)],
