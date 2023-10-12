@@ -7,7 +7,9 @@ export const LocationResource = {
   resource: Location,
   options: {
     properties: {
-      title: { type: 'string', maxLength: 255 },
+      title1: { type: 'string', maxLength: 255 },
+      title2: { type: 'string', maxLength: 255 },
+      title3: { type: 'string', maxLength: 255 },
     },
   },
 };

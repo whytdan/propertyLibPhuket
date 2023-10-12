@@ -82,8 +82,21 @@ export const RealEstateResource = {
   resource: RealEstate,
   options: {
     properties: {
-      title: { type: 'string', maxLength: 255 },
+      titleCard: { type: 'string', maxLength: 255 },
       price: { type: 'number', required: true },
+      priceMillionBahtFrom: { type: 'number' },
+      priceMillionBahtTo: { type: 'number' },
+      priceSquereFrom: { type: 'number' },
+      priceSquereTo: { type: 'number' },
+      badroomsAmountFrom: { type: 'number' },
+      badroomsAmountTo: { type: 'number' },
+      builtUpAreaFrom: { type: 'number' },
+      builtUpAreaTo: { type: 'number' },
+      landAreaFrom: { type: 'number' },
+      landAreaTo: { type: 'number' },
+      beachBang: { type: 'number' },
+      beachLian: { type: 'number' },
+
       roomsAmount: { type: 'number' },
       landArea: { type: 'number' }, // площадь участка
       builtUpArea: { type: 'number' }, // площадь застройки

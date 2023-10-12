@@ -4,8 +4,21 @@ import { ILocation } from './Locaion.js';
 
 export interface IRealEstate {
   _id: string;
-  title: string;
+  titleCard: string;
   price: number;
+  priceMillionBahtFrom: number;
+  priceMillionBahtTo: number;
+  priceSquereFrom: number;
+  priceSquereTo: number;
+  badroomsAmountFrom: number;
+  badroomsAmountTo: number;
+  builtUpAreaFrom: number;
+  builtUpAreaTo: number;
+  landAreaFrom: number;
+  landAreaTo: number;
+  beachBang: number;
+  beachLian: number;
+
   realEstateType: string;
   roomsAmount: number;
   landArea: number;
@@ -31,8 +44,21 @@ export interface IRealEstate {
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
-  title: { type: String, required: true, maxLength: 255 },
+  titleCard: { type: String, required: true, maxLength: 255 },
   price: { type: Number, required: true },
+  priceMillionBahtFrom: { type: Number },
+  priceMillionBahtTo: { type: Number },
+  priceSquereFrom: { type: Number },
+  priceSquereTo: { type: Number },
+  badroomsAmountFrom: { type: Number },
+  badroomsAmountTo: { type: Number },
+  builtUpAreaFrom: { type: Number },
+  builtUpAreaTo: { type: Number },
+  landAreaFrom: { type: Number },
+  landAreaTo: { type: Number },
+  beachBang: { type: Number },
+  beachLian: { type: Number },
+
   roomsAmount: { type: Number },
   landArea: { type: Number }, // площадь участка
   builtUpArea: { type: Number }, // площадь застройки

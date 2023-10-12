@@ -170,8 +170,21 @@
     "RealEstate": {
       "type": "object",
       "properties": {
-        "title": { "type": "string" },
+        "titleCard": { "type": "string" },
         "price": { "type": "number" },
+        "priceMillionBahtFrom": { "type": "number" },
+        "priceMillionBahtTo": { "type": "number" },
+        "priceSquereFrom": { "type": "number" },
+        "priceSquereTo": { "type": "number" },
+        "badroomsAmountFrom": { "type": "number" },
+        "badroomsAmountTo": { "type": "number" },
+        "builtUpAreaFrom": { "type": "number" },
+        "builtUpAreaTo": { "type": "number" },
+        "landAreaFrom": { "type": "number" },
+        "landAreaTo": { "type": "number" },
+        "beachBang": { "type": "number" },
+        "beachLian": { "type": "number" },
+
         "roomsAmount": { "type": "number" },
         "landArea": { "type": "number" },
         "builtUpArea": { "type": "number" },
