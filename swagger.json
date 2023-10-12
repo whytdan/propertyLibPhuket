@@ -16,9 +16,100 @@
         "description": "Retrieve a list of real estate properties. The results can be filtered and paginated using query parameters.",
         "parameters": [
           {
+            "name": "titleCard",
+            "in": "query",
+            "description": "Filter by titleCard",
+            "required": true,
+            "type": "string"
+          },
+          {
             "name": "price",
             "in": "query",
             "description": "Filter by price",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "priceMillionBahtFrom",
+            "in": "query",
+            "description": "Filter by priceMillionBahtFrom",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "priceMillionBahtTo",
+            "in": "query",
+            "description": "Filter by priceMillionBahtTo",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "priceSquereFrom",
+            "in": "query",
+            "description": "Filter by priceSquereFrom",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "priceSquereTo",
+            "in": "query",
+            "description": "Filter by priceSquereTo",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "badroomsAmountFrom",
+            "in": "query",
+            "description": "Filter by badroomsAmountFrom",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "badroomsAmountTo",
+            "in": "query",
+            "description": "Filter by badroomsAmountTo",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "builtUpAreaFrom",
+            "in": "query",
+            "description": "Filter by builtUpAreaFrom",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "builtUpAreaTo",
+            "in": "query",
+            "description": "Filter by builtUpAreaTo",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "landAreaFrom",
+            "in": "query",
+            "description": "Filter by landAreaFrom",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "landAreaTo",
+            "in": "query",
+            "description": "Filter by landAreaTo",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "beachBang",
+            "in": "query",
+            "description": "Filter by beachBang",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "beachLian",
+            "in": "query",
+            "description": "Filter by beachLian",
             "required": false,
             "type": "number"
           },
@@ -30,34 +121,6 @@
             "type": "number"
           },
           {
-            "name": "landArea",
-            "in": "query",
-            "description": "Filter by land area",
-            "required": false,
-            "type": "number"
-          },
-          {
-            "name": "kitchenArea",
-            "in": "query",
-            "description": "Filter by kitchen area",
-            "required": false,
-            "type": "number"
-          },
-          {
-            "name": "bathroomAmount",
-            "in": "query",
-            "description": "Filter by bathroom amount",
-            "required": false,
-            "type": "number"
-          },
-          {
-            "name": "buildingType",
-            "in": "query",
-            "description": "Filter by buildingType",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "yearBuilt",
             "in": "query",
             "description": "Filter by year built",
@@ -65,46 +128,11 @@
             "type": "number"
           },
           {
-            "name": "hasRestaraunt",
+            "name": "description",
             "in": "query",
-            "description": "Filter by hasRestaraunt",
+            "description": "Filter by description",
             "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "hasParking",
-            "in": "query",
-            "description": "Filter by hasParking",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "hasSpa",
-            "in": "query",
-            "description": "Filter by hasSpa",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "hasCommunalPool",
-            "in": "query",
-            "description": "Filter by hasCommunalPool",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "hasGym",
-            "in": "query",
-            "description": "Filter by hasGym",
-            "required": false,
-            "type": "boolean"
-          },
-          {
-            "name": "hasClub",
-            "in": "query",
-            "description": "Filter by hasClub",
-            "required": false,
-            "type": "boolean"
+            "type": "string"
           },
           {
             "name": "isRent",
@@ -119,20 +147,6 @@
             "description": "Filter by location",
             "required": false,
             "type": "string"
-          },
-          {
-            "name": "description",
-            "in": "query",
-            "description": "Filter by description",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "balconyAmount",
-            "in": "query",
-            "description": "Filter by balcony amount",
-            "required": false,
-            "type": "number"
           },
           {
             "name": "_page",
@@ -164,6 +178,29 @@
           }
         }
       }
+    },
+    "/realEstates/{id}": {
+      "get": {
+        "x-swagger-router-controller": "home",
+        "operationId": "index",
+        "tags": ["Real Estate Detail"],
+        "summary": "Fetch real estate detail by id",
+        "description": "Retrieve a single real estate by id",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved real estate",
+            "schema": {
+              "$ref": "#/definitions/RealEstate"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -186,24 +223,33 @@
         "beachLian": { "type": "number" },
 
         "roomsAmount": { "type": "number" },
-        "landArea": { "type": "number" },
-        "builtUpArea": { "type": "number" },
-        "kitchenArea": { "type": "number" },
-        "floor": { "type": "string" },
-        "bathroomAmount": { "type": "number" },
-        "balconyAmount": { "type": "number" },
-        "buildingType": { "type": "string" },
         "yearBuilt": { "type": "number" },
         "description": { "type": "string" },
-        "hasRestaraunt": { "type": "boolean" },
-        "hasParking": { "type": "boolean" },
-        "hasSpa": { "type": "boolean" },
-        "hasCommunalPool": { "type": "boolean" },
-        "hasGym": { "type": "boolean" },
-        "hasClub": { "type": "boolean" },
+        "UWCShool": { "type": "string" },
+        "villaMarket": { "type": "string" },
+        "blueTreeAquaPark": { "type": "string" },
+        "royalMarinaPhuket": { "type": "string" },
+        "airport": { "type": "string" },
+        "bangkokHospital": { "type": "string" },
+        "isPriorityBuilding": { "type": "boolean" },
+        "mainImage": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string"
+            }
+          }
+        },
         "images": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }

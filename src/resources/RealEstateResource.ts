@@ -98,21 +98,9 @@ export const RealEstateResource = {
       beachLian: { type: 'number' },
 
       roomsAmount: { type: 'number' },
-      landArea: { type: 'number' }, // площадь участка
-      builtUpArea: { type: 'number' }, // площадь застройки
-      kitchenArea: { type: 'number' }, // площадь кухни
-      floor: { type: 'string' },
-      bathroomAmount: { type: 'number' },
-      balconyAmount: { type: 'number' },
-      buildingType: { type: 'string' },
       yearBuilt: { type: 'number' },
       description: { type: 'richtext' },
-      hasRestaraunt: { type: 'boolean' },
-      hasParking: { type: 'boolean' },
-      hasSpa: { type: 'boolean' },
-      hasCommunalPool: { type: 'boolean' },
-      hasGym: { type: 'boolean' },
-      hasClub: { type: 'boolean' },
+      isRent: { type: 'boolean' },
       location: {
         type: 'reference',
         target: 'Location', // This should match the model name in Mongoose
@@ -123,6 +111,24 @@ export const RealEstateResource = {
       },
       images: {
         type: 'mixed',
+      },
+      UWCShool: {
+        type: 'string',
+      },
+      villaMarket: {
+        type: 'string',
+      },
+      blueTreeAquaPark: {
+        type: 'string',
+      },
+      royalMarinaPhuket: {
+        type: 'string',
+      },
+      airport: {
+        type: 'string',
+      },
+      bangkokHospital: {
+        type: 'string',
       },
       isPriorityBuilding: { type: 'boolean' },
       ...imagePropertiesFor('mainImage'),

@@ -18,28 +18,20 @@ export interface IRealEstate {
   landAreaTo: number;
   beachBang: number;
   beachLian: number;
-
-  realEstateType: string;
   roomsAmount: number;
-  landArea: number;
-  builtUpArea: number;
-  kitchenArea: number;
-  floor: string;
-  bathroomAmount: number;
-  balconyAmount: number;
-  buildingType: string;
   yearBuilt: number;
   description: string;
-  hasRestaraunt: boolean;
-  hasParking: boolean;
-  hasSpa: boolean;
-  hasCommunalPool: boolean;
-  hasGym: boolean;
-  hasClub: boolean;
   isRent: boolean;
   location: ILocation | null | ObjectId; // Added this
   mainImage: IFile;
   images: IFiles;
+
+  UWCShool: string;
+  villaMarket: string;
+  blueTreeAquaPark: string;
+  royalMarinaPhuket: string;
+  airport: string;
+  bangkokHospital: string;
   isPriorityBuilding: boolean;
 }
 
@@ -60,25 +52,20 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   beachLian: { type: Number },
 
   roomsAmount: { type: Number },
-  landArea: { type: Number }, // площадь участка
-  builtUpArea: { type: Number }, // площадь застройки
-  kitchenArea: { type: Number }, // площадь кухни
-  floor: { type: String },
-  bathroomAmount: { type: Number },
-  balconyAmount: { type: Number },
-  buildingType: { type: String },
   yearBuilt: { type: Number },
   description: { type: String },
-  hasRestaraunt: { type: Boolean, default: false },
-  hasParking: { type: Boolean, default: false },
-  hasSpa: { type: Boolean, default: false },
-  hasCommunalPool: { type: Boolean, default: false },
-  hasGym: { type: Boolean, default: false },
-  hasClub: { type: Boolean, default: false },
+
   isRent: { type: Boolean, default: false },
   location: { type: Schema.Types.ObjectId, ref: 'Location' },
   mainImage: { type: Schema.Types.Mixed },
   images: { type: Schema.Types.Mixed },
+
+  UWCShool: { type: String },
+  villaMarket: { type: String },
+  blueTreeAquaPark: { type: String },
+  royalMarinaPhuket: { type: String },
+  airport: { type: String },
+  bangkokHospital: { type: String },
   isPriorityBuilding: { type: Boolean, default: false },
 });
 
