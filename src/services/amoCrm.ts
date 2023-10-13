@@ -27,7 +27,7 @@ const amoCrmClient = new Client({
     state: 'state',
     server: {
       // порт, на котором запустится сервер авторизации
-      port: 3000,
+      port: 8000,
     },
   },
 });
