@@ -11,6 +11,7 @@ import { componentLoader } from './utils/componentLoader.js';
 import realEstatesRouter from './routes/realEstates.js';
 import locationsRouter from './routes/locations.js';
 import getAllTopObjectsRouter from './routes/getAllTopObjects.js';
+import leadsRouter from './routes/leads.js';
 import { RealEstateResource } from './resources/RealEstateResource.js';
 import { LocationResource } from './resources/LocationResource.js';
 
@@ -102,6 +103,7 @@ const start = async () => {
   app.use('/realEstates', realEstatesRouter);
   app.use('/locations', locationsRouter);
   app.use('/getAllTopObjects', getAllTopObjectsRouter);
+  app.use('/leads', leadsRouter);
 
   const PORT = process.env.PORT || 8000;
 
