@@ -85,11 +85,9 @@ const start = async () => {
 
   // app middlewares
   app.use(express.json());
-
-  // Enable CORS for both http://localhost:3001 and https://property-library.com/
   app.use(
     cors({
-      origin: ['http://localhost:3001', 'https://property-library.com'],
+      origin: '*',
     })
   );
 
