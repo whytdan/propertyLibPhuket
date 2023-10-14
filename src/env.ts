@@ -7,7 +7,7 @@ dotenv.config();
 export const env = createEnv({
   server: {
     NODE_ENV: z.enum(['development', 'production']).default('development'),
-    PORT: z.number().default(8000),
+    PORT: z.string().transform(val => parseInt(val)),
     HOST: z.string().default('localhost'),
 
     DATABASE_URL: z.string().min(1),
