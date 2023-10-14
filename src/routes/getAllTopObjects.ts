@@ -1,5 +1,4 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import {
@@ -7,10 +6,9 @@ import {
   RealEstate,
   RealEstateSchema,
 } from '../models/RealEstate.js';
+import { env } from '../env.js';
 
-dotenv.config();
-
-const s3ClientParams = { region: process.env.AWS_REGION };
+const s3ClientParams = { region: env.AWS_REGION };
 const s3Client = new S3Client(s3ClientParams);
 
 const router = express.Router();
@@ -71,24 +69,24 @@ router.get('/', async function (req, res) {
 
         const decryptedImagesPromises = realEstate?.images?.key?.length
           ? realEstate.images.key.map(async (key) => {
-              if (key) {
-                const imageParams = {
-                  Bucket: process.env.AWS_BUCKET,
-                  Key: key,
-                };
+            if (key) {
+              const imageParams = {
+                Bucket: env.AWS_BUCKET,
+                Key: key,
+              };
 
-                const command = new GetObjectCommand(imageParams);
-                const url = await getSignedUrl(s3Client, command);
+              const command = new GetObjectCommand(imageParams);
+              const url = await getSignedUrl(s3Client, command);
 
-                return {
-                  url,
-                };
-              } else {
-                return {
-                  url: '',
-                };
-              }
-            })
+              return {
+                url,
+              };
+            } else {
+              return {
+                url: '',
+              };
+            }
+          })
           : [];
 
         const realEstateImages = await Promise.all(decryptedImagesPromises);

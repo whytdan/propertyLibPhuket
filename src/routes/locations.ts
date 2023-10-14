@@ -1,8 +1,5 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import { Location } from '../models/Locaion.js';
-
-dotenv.config();
 
 const router = express.Router();
 

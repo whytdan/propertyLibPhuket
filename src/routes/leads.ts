@@ -1,12 +1,8 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import amoCrmClient from '../services/amoCrm.js';
-
-dotenv.config();
 
 const router = express.Router();
 
-/* GET locations listing. */
 router.post('/', async function (req, res) {
   try {
     const payload = req.body;

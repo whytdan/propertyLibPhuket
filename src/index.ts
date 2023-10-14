@@ -3,7 +3,6 @@ import AdminJS, { AdminJSOptions } from 'adminjs';
 import AdminJSExpress from '@adminjs/express';
 import { Resource, Database } from '@adminjs/mongoose';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import swaggerDocument from '../swagger.json' assert { type: 'json' };
@@ -14,8 +13,7 @@ import getAllTopObjectsRouter from './routes/getAllTopObjects.js';
 import leadsRouter from './routes/leads.js';
 import { RealEstateResource } from './resources/RealEstateResource.js';
 import { LocationResource } from './resources/LocationResource.js';
-
-dotenv.config();
+import { env } from './env.js';
 
 AdminJS.registerAdapter({
   Resource,
@@ -25,21 +23,17 @@ AdminJS.registerAdapter({
 const initDBConnection = async () => {
   console.log('Connecting to Database...');
 
-  if (process.env.DATABASE_URL) {
-    await mongoose.connect(process.env.DATABASE_URL, {});
+  await mongoose.connect(env.DATABASE_URL, {});
 
-    const db = mongoose.connection;
+  const db = mongoose.connection;
 
-    db.on('error', (error: any) =>
-      console.error(`MongoDB connection error: ${error}`)
-    );
+  db.on('error', (error: any) =>
+    console.error(`MongoDB connection error: ${error}`)
+  );
 
-    db.once('open', () => {
-      console.log('Connected to Database!');
-    });
-  } else {
-    throw new Error('Provide process.env.DATABASE_URL variable');
-  }
+  db.once('open', () => {
+    console.log('Connected to Database!');
+  });
 };
 
 const initAdminPanel = async (app: Application): Promise<AdminJS> => {
@@ -49,8 +43,8 @@ const initAdminPanel = async (app: Application): Promise<AdminJS> => {
   };
 
   const DEFAULT_ADMIN = {
-    email: process.env.ADMIN_USER_EMAIL || 'admin@example.com',
-    password: process.env.ADMIN_USER_PASSWORD || 'password',
+    email: env.ADMIN_USER_EMAIL,
+    password: env.ADMIN_USER_PASSWORD,
   };
 
   const authenticate = async (email: string, password: string) => {
@@ -105,12 +99,10 @@ const start = async () => {
   app.use('/getAllTopObjects', getAllTopObjectsRouter);
   app.use('/leads', leadsRouter);
 
-  const PORT = process.env.PORT || 8000;
-
-  app.listen(PORT, () => {
+  app.listen(env.PORT, () => {
     console.log('Server Started');
     console.log(
-      `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
+      `AdminJS started on http://${env.HOST}:${env.PORT}${admin.options.rootPath} or https://${env.HOST}:${env.PORT}${admin.options.rootPath}`
     );
   });
 

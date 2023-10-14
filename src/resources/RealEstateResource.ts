@@ -1,16 +1,14 @@
-import dotenv from 'dotenv';
 import uploadFeature from '@adminjs/upload';
 import { RealEstate } from '../models/RealEstate.js';
 import { componentLoader } from '../utils/componentLoader.js';
 import { Location } from '../models/Locaion.js';
-
-dotenv.config();
+import { env } from '../env.js';
 
 const AWScredentials = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-  region: process.env.AWS_REGION || '',
-  bucket: process.env.AWS_BUCKET || '',
+  accessKeyId: env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+  region: env.AWS_REGION,
+  bucket: env.AWS_BUCKET,
 };
 
 type ImagePropertiesType = {
@@ -21,28 +19,28 @@ type ImagePropertiesType = {
 };
 
 const imageProperties = (options = {}): ImagePropertiesType =>
-  ({
-    bucket: {
-      type: 'string',
-      isVisible: false,
-      ...options,
-    },
-    mime: {
-      type: 'string',
-      isVisible: false,
-      ...options,
-    },
-    key: {
-      type: 'string',
-      isVisible: false,
-      ...options,
-    },
-    size: {
-      type: 'number',
-      isVisible: false,
-      ...options,
-    },
-  } as const);
+({
+  bucket: {
+    type: 'string',
+    isVisible: false,
+    ...options,
+  },
+  mime: {
+    type: 'string',
+    isVisible: false,
+    ...options,
+  },
+  key: {
+    type: 'string',
+    isVisible: false,
+    ...options,
+  },
+  size: {
+    type: 'number',
+    isVisible: false,
+    ...options,
+  },
+} as const);
 
 const uploadFeatureFor = (name?: string, multiple = false) =>
   uploadFeature({
