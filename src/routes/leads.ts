@@ -7,7 +7,7 @@ import { isAxiosError } from "axios";
 const router = express.Router();
 
 const leadSchema = z.object({
-  fullName: z.string(),
+  name: z.string(),
   phoneNumber: z.string(),
   comment: z.string(),
   buy: z.boolean(),
@@ -47,8 +47,8 @@ router.post(
     const body = req.body as z.infer<typeof leadSchema>;
     try {
       const { data: contact } = await amoCrmAxios.post("/contacts", {
-        name: [body.fullName],
-        first_name: [body.fullName],
+        name: [body.name],
+        first_name: [body.name],
         custom_fields_values: [
           {
             field_id: customContactFields.phoneNumber.id,
@@ -63,7 +63,7 @@ router.post(
       });
 
       const { data } = await amoCrmAxios.post("/leads", {
-        name: body.fullName,
+        name: body.name,
         account_id: contact?.account_id,
       });
 
