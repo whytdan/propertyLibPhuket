@@ -1,40 +1,50 @@
 import express from 'express';
-import amoCrmClient from '../services/amoCrm.js';
+import { z } from 'zod';
+import zodValidatorMildderware from '../middlewares/zodValidator.middleware.js';
+import { amoCrmAxios } from '../services/index.js';
 
 const router = express.Router();
 
-router.post('/', async function (req, res) {
+const leadSchema = z.object({
+  fullName: z.string(),
+  phoneNumber: z.string(),
+  comment: z.string(),
+  buy: z.boolean(),
+  post: z.boolean(),
+  rent: z.boolean(),
+  other: z.boolean(),
+});
+
+router.post('/', zodValidatorMildderware(leadSchema), async function (req, res) {
+  const body = req.body as z.infer<typeof leadSchema>;
   try {
-    const payload = req.body;
-    console.log('lead payload:', payload);
+    const { data } = await amoCrmAxios.post('/leads', {
+      name: body.fullName,
+      custom_fields_values: [
+        { phoneNumber: body.phoneNumber || '' },
+        { comment: body.comment || '' },
+        { buy: Boolean(body.buy) },
+        { post: Boolean(body.post) },
+        { rent: Boolean(body.rent) },
+        { other: Boolean(body.other) },
+      ],
+    });
 
-    const { fullName, phoneNumber, comment, buy, post, rent, other } = payload;
-    const lead = new amoCrmClient.Lead();
+    console.log('response:', data);
 
-    console.log('lead:', lead);
-
-    lead.name = fullName;
-
-    lead.custom_fields_values = [
-      { phoneNumber: phoneNumber || '' },
-      { comment: comment || '' },
-      { buy: Boolean(buy) },
-      { post: Boolean(post) },
-      {
-        rent: Boolean(rent),
-      },
-      {
-        other: Boolean(other),
-      },
-    ];
-
-    const response = await lead.save();
-
-    console.log('response:', response);
-
-    res.json(response);
+    res.json(data);
   } catch (error) {
     console.error(`error in lead creation: ${error}`);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/', async function (req, res) {
+  try {
+    const { data } = await amoCrmAxios.get('/leads');
+    res.json(data);
+  } catch (error) {
+    console.error(`error in lead list request: ${error}`);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

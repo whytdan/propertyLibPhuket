@@ -7,13 +7,15 @@ import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import swaggerDocument from '../swagger.json' assert { type: 'json' };
 import { componentLoader } from './utils/componentLoader.js';
+import { RealEstateResource } from './resources/RealEstateResource.js';
+import { LocationResource } from './resources/LocationResource.js';
+import { env } from './env.js';
+
 import realEstatesRouter from './routes/realEstates.js';
 import locationsRouter from './routes/locations.js';
 import getAllTopObjectsRouter from './routes/getAllTopObjects.js';
 import leadsRouter from './routes/leads.js';
-import { RealEstateResource } from './resources/RealEstateResource.js';
-import { LocationResource } from './resources/LocationResource.js';
-import { env } from './env.js';
+import amoCrmRouter from './routes/amocrm.js';
 
 AdminJS.registerAdapter({
   Resource,
@@ -98,6 +100,7 @@ const start = async () => {
   app.use('/locations', locationsRouter);
   app.use('/getAllTopObjects', getAllTopObjectsRouter);
   app.use('/leads', leadsRouter);
+  app.use('/amocrm', amoCrmRouter);
 
   app.listen(env.PORT, () => {
     console.log('Server Started');
