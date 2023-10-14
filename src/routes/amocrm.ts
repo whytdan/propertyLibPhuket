@@ -57,7 +57,9 @@ amoCrmRouter.get("/redirect", async function (req, res) {
       expires_at: tokens.expires_at,
     }, { upsert: true });
 
-    return res.send(data);
+
+    // return res.send(data);
+    return res.redirect('/admin');
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
