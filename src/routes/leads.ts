@@ -63,7 +63,7 @@ router.post(
       });
 
       const { data } = await amoCrmAxios.post("/leads", {
-        name:[ body.fullName],
+        name: [body.fullName],
         account_id: contact?.account_id,
       });
 
