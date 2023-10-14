@@ -67,6 +67,7 @@ router.post(
       const { data } = await amoCrmAxios.post("/leads", {
         name: [body.fullName],
         account_id: contact?.account_id,
+        phone:  [body.phoneNumber],
       });
 
       console.log("response:", data);
