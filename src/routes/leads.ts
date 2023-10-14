@@ -49,7 +49,7 @@ router.post(
       const { data: contact } = await amoCrmAxios.post("/contacts", {
         name: [body.fullName],
         first_name: [body.fullName],
-        phone:  [body.phoneNumber],
+        phone: [body.phoneNumber],
         custom_fields_values: [
           {
             field_id: customContactFields.phoneNumber.id,
@@ -58,7 +58,10 @@ router.post(
                 value: body.phoneNumber,
                 enum_id: customContactFields.phoneNumber.enums.WORK,
               },
-              
+              {
+                value: body.comment,
+                enum_id: customContactFields.phoneNumber.enums.WORK,
+              },
             ],
           },
         ],
@@ -67,7 +70,7 @@ router.post(
       const { data } = await amoCrmAxios.post("/leads", {
         name: [body.fullName],
         account_id: contact?.account_id,
-        phone:  [body.phoneNumber],
+        phone: [body.phoneNumber],
       });
 
       console.log("response:", data);
