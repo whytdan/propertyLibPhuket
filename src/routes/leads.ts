@@ -56,29 +56,31 @@ router.post(
               {
                 value: body.phoneNumber,
                 // enum_id: customContactFields.phoneNumber.enums.WORK,
-              }
+              },
             ],
           },
         ],
       });
 
-      const { data } = await amoCrmAxios.post("/leads", [
-        {
-          name: body.fullName,
-          account_id: contact?.account_id,
-          custom_fields_values: [
-            {
-              field_id: customContactFields.phoneNumber.id,
-              values: [
-                {
-                  value: body.phoneNumber,
-                  // enum_id: customContactFields.phoneNumber.enums.WORK,
-                },
-              ],
-            },
-          ],
-        },
-      ]);
+      const { data } = await amoCrmAxios.post("/leads", {
+        add: [
+          {
+            name: body.fullName,
+            account_id: contact?.account_id,
+            custom_fields_values: [
+              {
+                field_id: customContactFields.phoneNumber.id,
+                values: [
+                  {
+                    value: body.phoneNumber,
+                    // enum_id: customContactFields.phoneNumber.enums.WORK,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
 
       console.log("response:", data);
 
