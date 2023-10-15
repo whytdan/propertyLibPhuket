@@ -51,6 +51,7 @@ router.get('/', async function (req, res) {
     const skip = (page - 1) * limit;
     const realEstates = await RealEstate.find(query)
       .populate('location')
+      .populate('publicPlaces')
       .skip(skip)
       .limit(limit);
 
@@ -116,7 +117,9 @@ router.get('/:id', async function (req, res) {
     const id = req.params.id; // Extracting ID from route parameters
 
     // Find real estate record by ID
-    const realEstate = await RealEstate.findById(id).populate('location');
+    const realEstate = await RealEstate.findById(id)
+      .populate('location')
+      .populate('publicPlaces');
 
     if (!realEstate) {
       // No record found for given ID
