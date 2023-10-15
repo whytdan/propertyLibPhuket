@@ -129,6 +129,11 @@ export const RealEstateResource = {
         type: 'string',
       },
       isPriorityBuilding: { type: 'boolean' },
+      publicPlaces: {
+        type: 'reference',
+        target: 'PublicPlace',
+        isArray: true,
+      },
       ...imagePropertiesFor('mainImage'),
       ...imagePropertiesFor('images', { isArray: true }),
     },
@@ -136,17 +141,20 @@ export const RealEstateResource = {
       location: {
         resource: Location,
       },
+      publicPlaces: {
+        resource: 'PublicPlace',
+      },
     },
 
     actions: {
       show: {
-        populate: ['location'],
+        populate: ['location', 'publicPlaces'],
       },
       edit: {
-        populate: ['location'],
+        populate: ['location', 'publicPlaces'],
       },
       list: {
-        populate: ['location'],
+        populate: ['location', 'publicPlaces'],
       },
     },
   },

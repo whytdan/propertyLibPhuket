@@ -16,6 +16,7 @@ import locationsRouter from './routes/locations.js';
 import getAllTopObjectsRouter from './routes/getAllTopObjects.js';
 import leadsRouter from './routes/leads.js';
 import amoCrmRouter from './routes/amocrm.js';
+import { PublicPlaceResource } from './resources/PublicPlaceResource.js';
 
 AdminJS.registerAdapter({
   Resource,
@@ -40,7 +41,7 @@ const initDBConnection = async () => {
 
 const initAdminPanel = async (app: Application): Promise<AdminJS> => {
   const adminOptions: AdminJSOptions = {
-    resources: [RealEstateResource, LocationResource],
+    resources: [RealEstateResource, LocationResource, PublicPlaceResource],
     componentLoader: componentLoader,
   };
 

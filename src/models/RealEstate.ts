@@ -1,6 +1,7 @@
 import { model, ObjectId, Schema } from 'mongoose';
 import { IFile, IFiles } from 'ts/interfaces.js';
 import { ILocation } from './Locaion.js';
+import { IPublicPlace } from './PublicPlace.js';
 
 export interface IRealEstate {
   _id: string;
@@ -23,6 +24,7 @@ export interface IRealEstate {
   description: string;
   isRent: boolean;
   location: ILocation | null | ObjectId; // Added this
+  publicPlaces: (IPublicPlace)[];
   mainImage: IFile;
   images: IFiles;
 
@@ -67,6 +69,7 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   airport: { type: String },
   bangkokHospital: { type: String },
   isPriorityBuilding: { type: Boolean, default: false },
+  publicPlaces: { type: [{ type: Schema.Types.ObjectId, ref: 'PublicPlace' }] },
 });
 
 export const RealEstate = model<IRealEstate>('RealEstate', RealEstateSchema);
