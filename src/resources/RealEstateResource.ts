@@ -98,6 +98,8 @@ export const RealEstateResource = {
       roomsAmount: { type: 'number' },
       yearBuilt: { type: 'number' },
       description: { type: 'richtext' },
+      description_ru: { type: 'richtext' },
+      description_en: { type: 'richtext' },
       isRent: { type: 'boolean' },
       location: {
         type: 'reference',
@@ -109,24 +111,6 @@ export const RealEstateResource = {
       },
       images: {
         type: 'mixed',
-      },
-      UWCShool: {
-        type: 'string',
-      },
-      villaMarket: {
-        type: 'string',
-      },
-      blueTreeAquaPark: {
-        type: 'string',
-      },
-      royalMarinaPhuket: {
-        type: 'string',
-      },
-      airport: {
-        type: 'string',
-      },
-      bangkokHospital: {
-        type: 'string',
       },
       isPriorityBuilding: { type: 'boolean' },
       publicPlaces: {

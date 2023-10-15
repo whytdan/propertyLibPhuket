@@ -22,18 +22,13 @@ export interface IRealEstate {
   roomsAmount: number;
   yearBuilt: number;
   description: string;
+  description_ru: string;
+  description_en: string;
   isRent: boolean;
   location: ILocation | null | ObjectId; // Added this
   publicPlaces: (IPublicPlace)[];
   mainImage: IFile;
   images: IFiles;
-
-  UWCShool: string;
-  villaMarket: string;
-  blueTreeAquaPark: string;
-  royalMarinaPhuket: string;
-  airport: string;
-  bangkokHospital: string;
   isPriorityBuilding: boolean;
 }
 
@@ -55,19 +50,15 @@ export const RealEstateSchema = new Schema<IRealEstate>({
 
   roomsAmount: { type: Number },
   yearBuilt: { type: Number },
-  description: { type: String },
+  description: { type: String, defeault: '' },
+  description_ru: { type: String, default: '' },
+  description_en: { type: String, default: '' },
 
   isRent: { type: Boolean, default: false },
   location: { type: Schema.Types.ObjectId, ref: 'Location' },
   mainImage: { type: Schema.Types.Mixed },
   images: { type: Schema.Types.Mixed },
 
-  UWCShool: { type: String },
-  villaMarket: { type: String },
-  blueTreeAquaPark: { type: String },
-  royalMarinaPhuket: { type: String },
-  airport: { type: String },
-  bangkokHospital: { type: String },
   isPriorityBuilding: { type: Boolean, default: false },
   publicPlaces: { type: [{ type: Schema.Types.ObjectId, ref: 'PublicPlace' }] },
 });
