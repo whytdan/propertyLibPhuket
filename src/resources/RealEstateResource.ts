@@ -1,8 +1,8 @@
 import uploadFeature from '@adminjs/upload';
 import { RealEstate } from '../models/RealEstate.js';
 import { componentLoader } from '../utils/componentLoader.js';
-import { Location } from '../models/Locaion.js';
 import { env } from '../env.js';
+import { ResourceWithOptions } from 'adminjs';
 
 const AWScredentials = {
   accessKeyId: env.AWS_ACCESS_KEY_ID,
@@ -76,12 +76,12 @@ const imagePropertiesFor = (name: string, options = {}) => {
   );
 };
 
-export const RealEstateResource = {
+export const RealEstateResource: ResourceWithOptions = {
   resource: RealEstate,
   options: {
     properties: {
-      titleCard: { type: 'string', maxLength: 255 },
-      price: { type: 'number', required: true },
+      titleCard: { type: 'string' },
+      price: { type: 'number' },
       priceMillionBahtFrom: { type: 'number' },
       priceMillionBahtTo: { type: 'number' },
       priceSquereFrom: { type: 'number' },
@@ -97,13 +97,11 @@ export const RealEstateResource = {
 
       roomsAmount: { type: 'number' },
       yearBuilt: { type: 'number' },
-      description: { type: 'richtext' },
       description_ru: { type: 'richtext' },
       description_en: { type: 'richtext' },
       isRent: { type: 'boolean' },
       location: {
         type: 'reference',
-        target: 'Location', // This should match the model name in Mongoose
         isRequired: false,
       },
       mainImage: {
@@ -115,31 +113,28 @@ export const RealEstateResource = {
       isPriorityBuilding: { type: 'boolean' },
       publicPlaces: {
         type: 'reference',
-        target: 'PublicPlace',
         isArray: true,
+      },
+      publicPlace_1: {
+        type: 'reference'
+      },
+      publicPlace_2: {
+        type: 'reference'
+      },
+      publicPlace_3: {
+        type: 'reference'
+      },
+      publicPlace_4: {
+        type: 'reference'
+      },
+      publicPlace_5: {
+        type: 'reference'
+      },
+      publicPlace_6: {
+        type: 'reference'
       },
       ...imagePropertiesFor('mainImage'),
       ...imagePropertiesFor('images', { isArray: true }),
-    },
-    populate: {
-      location: {
-        resource: Location,
-      },
-      publicPlaces: {
-        resource: 'PublicPlace',
-      },
-    },
-
-    actions: {
-      show: {
-        populate: ['location', 'publicPlaces'],
-      },
-      edit: {
-        populate: ['location', 'publicPlaces'],
-      },
-      list: {
-        populate: ['location', 'publicPlaces'],
-      },
     },
   },
   features: [uploadFeatureFor('mainImage'), uploadFeatureFor('images', true)],

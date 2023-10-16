@@ -52,6 +52,12 @@ router.get('/', async function (req, res) {
     const realEstates = await RealEstate.find(query)
       .populate('location')
       .populate('publicPlaces')
+      .populate('publicPlace_1')
+      .populate('publicPlace_2')
+      .populate('publicPlace_3')
+      .populate('publicPlace_4')
+      .populate('publicPlace_5')
+      .populate('publicPlace_6')
       .skip(skip)
       .limit(limit);
 
@@ -119,7 +125,13 @@ router.get('/:id', async function (req, res) {
     // Find real estate record by ID
     const realEstate = await RealEstate.findById(id)
       .populate('location')
-      .populate('publicPlaces');
+      .populate('publicPlaces')
+      .populate('publicPlace_1')
+      .populate('publicPlace_2')
+      .populate('publicPlace_3')
+      .populate('publicPlace_4')
+      .populate('publicPlace_5')
+      .populate('publicPlace_6');
 
     if (!realEstate) {
       // No record found for given ID

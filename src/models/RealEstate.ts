@@ -26,10 +26,16 @@ export interface IRealEstate {
   description_en: string;
   isRent: boolean;
   location: ILocation | null | ObjectId; // Added this
-  publicPlaces: (IPublicPlace)[];
   mainImage: IFile;
   images: IFiles;
   isPriorityBuilding: boolean;
+  publicPlaces: (IPublicPlace | ObjectId)[];
+  publicPlace_1: IPublicPlace | ObjectId;
+  publicPlace_2: IPublicPlace | ObjectId;
+  publicPlace_3: IPublicPlace | ObjectId;
+  publicPlace_4: IPublicPlace | ObjectId;
+  publicPlace_5: IPublicPlace | ObjectId;
+  publicPlace_6: IPublicPlace | ObjectId;
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
@@ -50,7 +56,6 @@ export const RealEstateSchema = new Schema<IRealEstate>({
 
   roomsAmount: { type: Number },
   yearBuilt: { type: Number },
-  description: { type: String, defeault: '' },
   description_ru: { type: String, default: '' },
   description_en: { type: String, default: '' },
 
@@ -61,6 +66,12 @@ export const RealEstateSchema = new Schema<IRealEstate>({
 
   isPriorityBuilding: { type: Boolean, default: false },
   publicPlaces: { type: [{ type: Schema.Types.ObjectId, ref: 'PublicPlace' }] },
+  publicPlace_1: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_2: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_3: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_4: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_5: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_6: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
 });
 
 export const RealEstate = model<IRealEstate>('RealEstate', RealEstateSchema);
