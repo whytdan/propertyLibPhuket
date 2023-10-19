@@ -5,8 +5,8 @@ import { IPublicPlace } from './PublicPlace.js';
 
 export interface IRealEstate {
   _id: string;
-  titleCard: string;
-  price: number;
+  titleCard_ru: string;
+  titleCard_en: string;
   priceMillionBahtFrom: number;
   priceMillionBahtTo: number;
   priceSquereFrom: number;
@@ -21,7 +21,6 @@ export interface IRealEstate {
   beachLian: number;
   roomsAmount: number;
   yearBuilt: number;
-  description: string;
   description_ru: string;
   description_en: string;
   isRent: boolean;
@@ -39,8 +38,8 @@ export interface IRealEstate {
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
-  titleCard: { type: String, required: true, maxLength: 255 },
-  price: { type: Number, required: true },
+  titleCard_ru: { type: String, required: true, maxLength: 255 },
+  titleCard_en: { type: String, required: true, maxLength: 255 },
   priceMillionBahtFrom: { type: Number },
   priceMillionBahtTo: { type: Number },
   priceSquereFrom: { type: Number },

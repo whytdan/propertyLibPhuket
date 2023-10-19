@@ -19,28 +19,28 @@ type ImagePropertiesType = {
 };
 
 const imageProperties = (options = {}): ImagePropertiesType =>
-({
-  bucket: {
-    type: 'string',
-    isVisible: false,
-    ...options,
-  },
-  mime: {
-    type: 'string',
-    isVisible: false,
-    ...options,
-  },
-  key: {
-    type: 'string',
-    isVisible: false,
-    ...options,
-  },
-  size: {
-    type: 'number',
-    isVisible: false,
-    ...options,
-  },
-} as const);
+  ({
+    bucket: {
+      type: 'string',
+      isVisible: false,
+      ...options,
+    },
+    mime: {
+      type: 'string',
+      isVisible: false,
+      ...options,
+    },
+    key: {
+      type: 'string',
+      isVisible: false,
+      ...options,
+    },
+    size: {
+      type: 'number',
+      isVisible: false,
+      ...options,
+    },
+  } as const);
 
 const uploadFeatureFor = (name?: string, multiple = false) =>
   uploadFeature({
@@ -80,8 +80,8 @@ export const RealEstateResource: ResourceWithOptions = {
   resource: RealEstate,
   options: {
     properties: {
-      titleCard: { type: 'string' },
-      price: { type: 'number' },
+      titleCard_ru: { type: 'string' },
+      titleCard_en: { type: 'string' },
       priceMillionBahtFrom: { type: 'number' },
       priceMillionBahtTo: { type: 'number' },
       priceSquereFrom: { type: 'number' },
@@ -116,22 +116,22 @@ export const RealEstateResource: ResourceWithOptions = {
         isArray: true,
       },
       publicPlace_1: {
-        type: 'reference'
+        type: 'reference',
       },
       publicPlace_2: {
-        type: 'reference'
+        type: 'reference',
       },
       publicPlace_3: {
-        type: 'reference'
+        type: 'reference',
       },
       publicPlace_4: {
-        type: 'reference'
+        type: 'reference',
       },
       publicPlace_5: {
-        type: 'reference'
+        type: 'reference',
       },
       publicPlace_6: {
-        type: 'reference'
+        type: 'reference',
       },
       ...imagePropertiesFor('mainImage'),
       ...imagePropertiesFor('images', { isArray: true }),
