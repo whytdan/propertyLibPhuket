@@ -97,8 +97,8 @@ export const RealEstateResource: ResourceWithOptions = {
 
       roomsAmount: { type: 'number' },
       yearBuilt: { type: 'number' },
-      description_ru: { type: 'richtext' },
-      description_en: { type: 'richtext' },
+      description_ru: { type: 'textarea' },
+      description_en: { type: 'textarea' },
       isRent: { type: 'boolean' },
       location: {
         type: 'reference',
@@ -111,6 +111,8 @@ export const RealEstateResource: ResourceWithOptions = {
         type: 'mixed',
       },
       isPriorityBuilding: { type: 'boolean' },
+      isVilla: { type: 'boolean' },
+      isApartment: { type: 'boolean' },
       publicPlaces: {
         type: 'reference',
         isArray: true,

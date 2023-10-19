@@ -7,6 +7,7 @@ export interface IRealEstate {
   _id: string;
   titleCard_ru: string;
   titleCard_en: string;
+  buildingType: string;
   priceMillionBahtFrom: number;
   priceMillionBahtTo: number;
   priceSquereFrom: number;
@@ -28,6 +29,9 @@ export interface IRealEstate {
   mainImage: IFile;
   images: IFiles;
   isPriorityBuilding: boolean;
+  isVilla: boolean;
+  isApartment: boolean;
+
   publicPlaces: (IPublicPlace | ObjectId)[];
   publicPlace_1: IPublicPlace | ObjectId;
   publicPlace_2: IPublicPlace | ObjectId;
@@ -50,13 +54,16 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   builtUpAreaTo: { type: Number },
   landAreaFrom: { type: Number },
   landAreaTo: { type: Number },
-  beachBang: { type: Number },
-  beachLian: { type: Number },
+  beachBang: { type: Number, required: true },
+  beachLian: { type: Number, required: true },
+  buildingType: { type: String },
 
   roomsAmount: { type: Number },
   yearBuilt: { type: Number },
   description_ru: { type: String, default: '' },
   description_en: { type: String, default: '' },
+  isVilla: { type: Boolean, default: false },
+  isApartment: { type: Boolean, default: false },
 
   isRent: { type: Boolean, default: false },
   location: { type: Schema.Types.ObjectId, ref: 'Location' },

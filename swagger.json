@@ -225,6 +225,8 @@
         "airport": { "type": "string" },
         "bangkokHospital": { "type": "string" },
         "isPriorityBuilding": { "type": "boolean" },
+        "isVilla": { "type": "boolean" },
+        "isApartment": { "type": "boolean" },
         "mainImage": {
           "type": "object",
           "properties": {
