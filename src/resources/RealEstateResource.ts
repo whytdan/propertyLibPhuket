@@ -111,28 +111,18 @@ export const RealEstateResource: ResourceWithOptions = {
         type: 'mixed',
       },
       isPriorityBuilding: { type: 'boolean' },
-      publicPlaces: {
-        type: 'reference',
-        isArray: true,
-      },
-      publicPlace_1: {
-        type: 'reference'
-      },
-      publicPlace_2: {
-        type: 'reference'
-      },
-      publicPlace_3: {
-        type: 'reference'
-      },
-      publicPlace_4: {
-        type: 'reference'
-      },
-      publicPlace_5: {
-        type: 'reference'
-      },
-      publicPlace_6: {
-        type: 'reference'
-      },
+      publicPlace_1: { type: 'reference', description: 'Место по близости 1' },
+      publicPlace_1_time: { type: 'string', description: 'Время' },
+      publicPlace_2: { type: 'reference', description: 'Место по близости 2' },
+      publicPlace_2_time: { type: 'string', description: 'Время' },
+      publicPlace_3: { type: 'reference', description: 'Место по близости 3' },
+      publicPlace_3_time: { type: 'string', description: 'Время' },
+      publicPlace_4: { type: 'reference', description: 'Место по близости 4' },
+      publicPlace_4_time: { type: 'string', description: 'Время' },
+      publicPlace_5: { type: 'reference', description: 'Место по близости 5' },
+      publicPlace_5_time: { type: 'string', description: 'Время' },
+      publicPlace_6: { type: 'reference', description: 'Место по близости 6' },
+      publicPlace_6_time: { type: 'string', description: 'Время' },
       ...imagePropertiesFor('mainImage'),
       ...imagePropertiesFor('images', { isArray: true }),
     },

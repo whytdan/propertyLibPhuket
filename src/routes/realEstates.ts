@@ -51,7 +51,6 @@ router.get('/', async function (req, res) {
     const skip = (page - 1) * limit;
     const realEstates = await RealEstate.find(query)
       .populate('location')
-      .populate('publicPlaces')
       .populate('publicPlace_1')
       .populate('publicPlace_2')
       .populate('publicPlace_3')

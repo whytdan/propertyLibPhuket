@@ -29,13 +29,18 @@ export interface IRealEstate {
   mainImage: IFile;
   images: IFiles;
   isPriorityBuilding: boolean;
-  publicPlaces: (IPublicPlace | ObjectId)[];
   publicPlace_1: IPublicPlace | ObjectId;
+  publicPlace_1_time: string;
   publicPlace_2: IPublicPlace | ObjectId;
+  publicPlace_2_time: string;
   publicPlace_3: IPublicPlace | ObjectId;
+  publicPlace_3_time: string;
   publicPlace_4: IPublicPlace | ObjectId;
+  publicPlace_4_time: string;
   publicPlace_5: IPublicPlace | ObjectId;
+  publicPlace_5_time: string;
   publicPlace_6: IPublicPlace | ObjectId;
+  publicPlace_6_time: string;
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
@@ -65,13 +70,18 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   images: { type: Schema.Types.Mixed },
 
   isPriorityBuilding: { type: Boolean, default: false },
-  publicPlaces: { type: [{ type: Schema.Types.ObjectId, ref: 'PublicPlace' }] },
   publicPlace_1: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_1_time: { type: String, default: '20 минут' },
   publicPlace_2: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_2_time: { type: String, default: '20 минут' },
   publicPlace_3: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_3_time: { type: String, default: '20 минут' },
   publicPlace_4: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_4_time: { type: String, default: '20 минут' },
   publicPlace_5: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_5_time: { type: String, default: '20 минут' },
   publicPlace_6: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
+  publicPlace_6_time: { type: String, default: '20 минут' },
 });
 
 export const RealEstate = model<IRealEstate>('RealEstate', RealEstateSchema);
