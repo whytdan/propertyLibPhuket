@@ -34,11 +34,13 @@ router.get('/', async function (req, res) {
 
       if (allowedFields.includes(baseField)) {
         // Check for special filters like _gte and _lte
-        if (key === 'price_gte') {
-          query.priceMillionBahtFrom = { $gte: value };
-        }
-        else if (key === 'price_lte') {
-          query.priceMillionBahtTo = { $lte: value };
+        if (key.startsWith('price')) {
+          if (key === 'price_gte') {
+            query.priceMillionBahtFrom = { $gte: value };
+          }
+          if (key === 'price_lte') {
+            query.priceMillionBahtTo = { $lte: value };
+          }
         }
         else if (key.endsWith('_gte')) {
           if (!query[baseField]) query[baseField] = {};
