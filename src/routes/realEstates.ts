@@ -135,7 +135,6 @@ router.get('/:id', async function (req, res) {
     // Find real estate record by ID
     const realEstate = await RealEstate.findById(id)
       .populate('location')
-      .populate('publicPlaces')
       .populate('publicPlace_1')
       .populate('publicPlace_2')
       .populate('publicPlace_3')
