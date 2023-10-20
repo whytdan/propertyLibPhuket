@@ -5,8 +5,9 @@ import { IPublicPlace } from './PublicPlace.js';
 
 export interface IRealEstate {
   _id: string;
-  titleCard: string;
-  price: number;
+  titleCard_ru: string;
+  titleCard_en: string;
+  buildingType: string;
   priceMillionBahtFrom: number;
   priceMillionBahtTo: number;
   priceSquereFrom: number;
@@ -21,7 +22,6 @@ export interface IRealEstate {
   beachLian: number;
   roomsAmount: number;
   yearBuilt: number;
-  description: string;
   description_ru: string;
   description_en: string;
   isRent: boolean;
@@ -29,6 +29,9 @@ export interface IRealEstate {
   mainImage: IFile;
   images: IFiles;
   isPriorityBuilding: boolean;
+  isVilla: boolean;
+  isApartment: boolean;
+
   publicPlace_1: IPublicPlace | ObjectId;
   publicPlace_1_time: string;
   publicPlace_2: IPublicPlace | ObjectId;
@@ -44,8 +47,8 @@ export interface IRealEstate {
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({
-  titleCard: { type: String, required: true, maxLength: 255 },
-  price: { type: Number, required: true },
+  titleCard_ru: { type: String, required: true, maxLength: 255 },
+  titleCard_en: { type: String, required: true, maxLength: 255 },
   priceMillionBahtFrom: { type: Number },
   priceMillionBahtTo: { type: Number },
   priceSquereFrom: { type: Number },
@@ -56,13 +59,16 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   builtUpAreaTo: { type: Number },
   landAreaFrom: { type: Number },
   landAreaTo: { type: Number },
-  beachBang: { type: Number },
-  beachLian: { type: Number },
+  beachBang: { type: Number, required: true },
+  beachLian: { type: Number, required: true },
+  buildingType: { type: String },
 
   roomsAmount: { type: Number },
   yearBuilt: { type: Number },
   description_ru: { type: String, default: '' },
   description_en: { type: String, default: '' },
+  isVilla: { type: Boolean, default: false },
+  isApartment: { type: Boolean, default: false },
 
   isRent: { type: Boolean, default: false },
   location: { type: Schema.Types.ObjectId, ref: 'Location' },

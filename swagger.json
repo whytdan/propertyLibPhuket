@@ -16,18 +16,18 @@
         "description": "Retrieve a list of real estate properties. The results can be filtered and paginated using query parameters.",
         "parameters": [
           {
-            "name": "titleCard",
+            "name": "titleCard_ru",
             "in": "query",
-            "description": "Filter by titleCard",
+            "description": "Filter by titleCard_ru",
             "required": true,
             "type": "string"
           },
           {
-            "name": "price",
+            "name": "titleCard_en",
             "in": "query",
-            "description": "Filter by price",
-            "required": false,
-            "type": "number"
+            "description": "Filter by titleCard_en",
+            "required": true,
+            "type": "string"
           },
           {
             "name": "priceMillionBahtFrom",
@@ -128,13 +128,6 @@
             "type": "number"
           },
           {
-            "name": "description",
-            "in": "query",
-            "description": "Filter by description",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "isRent",
             "in": "query",
             "description": "Filter by isRent",
@@ -207,8 +200,8 @@
     "RealEstate": {
       "type": "object",
       "properties": {
-        "titleCard": { "type": "string" },
-        "price": { "type": "number" },
+        "titleCard_ru": { "type": "string" },
+        "titleCard_en": { "type": "string" },
         "priceMillionBahtFrom": { "type": "number" },
         "priceMillionBahtTo": { "type": "number" },
         "priceSquereFrom": { "type": "number" },
@@ -232,6 +225,8 @@
         "airport": { "type": "string" },
         "bangkokHospital": { "type": "string" },
         "isPriorityBuilding": { "type": "boolean" },
+        "isVilla": { "type": "boolean" },
+        "isApartment": { "type": "boolean" },
         "mainImage": {
           "type": "object",
           "properties": {

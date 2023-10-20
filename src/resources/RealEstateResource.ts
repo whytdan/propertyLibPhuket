@@ -80,8 +80,8 @@ export const RealEstateResource: ResourceWithOptions = {
   resource: RealEstate,
   options: {
     properties: {
-      titleCard: { type: 'string' },
-      price: { type: 'number' },
+      titleCard_ru: { type: 'string' },
+      titleCard_en: { type: 'string' },
       priceMillionBahtFrom: { type: 'number' },
       priceMillionBahtTo: { type: 'number' },
       priceSquereFrom: { type: 'number' },
@@ -97,8 +97,8 @@ export const RealEstateResource: ResourceWithOptions = {
 
       roomsAmount: { type: 'number' },
       yearBuilt: { type: 'number' },
-      description_ru: { type: 'richtext' },
-      description_en: { type: 'richtext' },
+      description_ru: { type: 'textarea' },
+      description_en: { type: 'textarea' },
       isRent: { type: 'boolean' },
       location: {
         type: 'reference',
@@ -111,6 +111,9 @@ export const RealEstateResource: ResourceWithOptions = {
         type: 'mixed',
       },
       isPriorityBuilding: { type: 'boolean' },
+      isVilla: { type: 'boolean' },
+      isApartment: { type: 'boolean' },
+
       publicPlace_1: { type: 'reference', description: 'Место по близости 1' },
       publicPlace_1_time: { type: 'string', description: 'Время' },
       publicPlace_2: { type: 'reference', description: 'Место по близости 2' },
