@@ -7,6 +7,7 @@ import {
   RealEstateSchema,
 } from '../models/RealEstate.js';
 import { env } from '../env.js';
+import { FilterQuery } from 'mongoose';
 
 const s3ClientParams = { region: env.AWS_REGION };
 const s3Client = new S3Client(s3ClientParams);
@@ -16,10 +17,10 @@ const router = express.Router();
 /* GET realEstates wirh priority listing. */
 router.get('/', async function (req, res) {
   try {
-    const query: Partial<IRealEstate> & {
+    const query: FilterQuery<IRealEstate> & {
       _page?: number;
       _limit?: number;
-      [key: string]: any;
+      // [key: string]: any;
     } = {};
 
     // Get the list of fields from the schema
@@ -33,13 +34,21 @@ router.get('/', async function (req, res) {
 
       if (allowedFields.includes(baseField)) {
         // Check for special filters like _gte and _lte
-        if (key.endsWith('_gte')) {
+        if (key === 'price_gte') {
+          query.priceMillionBahtFrom = { $gte: value };
+        }
+        else if (key === 'price_lte') {
+          query.priceMillionBahtTo = { $lte: value };
+        }
+        else if (key.endsWith('_gte')) {
           if (!query[baseField]) query[baseField] = {};
           query[baseField].$gte = value;
-        } else if (key.endsWith('_lte')) {
+        }
+        else if (key.endsWith('_lte')) {
           if (!query[baseField]) query[baseField] = {};
           query[baseField].$lte = value;
-        } else if (key !== '_page' && key !== '_limit') {
+        }
+        else if (key !== '_page' && key !== '_limit') {
           (query as any)[key] = value;
         }
       }
