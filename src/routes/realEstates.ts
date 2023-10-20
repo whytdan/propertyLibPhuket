@@ -31,18 +31,18 @@ router.get('/', async function (req, res) {
       if (typeof value !== 'string') continue;
 
       const baseField = key.replace(/_(gte|lte)$/, ''); // Extract base field name
-
-      if (allowedFields.includes(baseField)) {
-        // Check for special filters like _gte and _lte
-        if (key.startsWith('price')) {
-          if (key === 'price_gte') {
-            query.priceMillionBahtFrom = { $gte: value };
-          }
-          if (key === 'price_lte') {
-            query.priceMillionBahtTo = { $lte: value };
-          }
+      if (key.startsWith('price')) {
+        if (key === 'price_gte') {
+          query.priceMillionBahtFrom = { $gte: value };
         }
-        else if (key.endsWith('_gte')) {
+        if (key === 'price_lte') {
+          query.priceMillionBahtTo = { $lte: value };
+        }
+      }
+      else if (allowedFields.includes(baseField)) {
+        // Check for special filters like _gte and _lte
+
+        if (key.endsWith('_gte')) {
           if (!query[baseField]) query[baseField] = {};
           query[baseField].$gte = value;
         }
