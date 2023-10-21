@@ -1,5 +1,5 @@
 import { model, ObjectId, Schema } from 'mongoose';
-import { IFile, IFiles } from 'ts/interfaces.js';
+import { IFile, IFiles } from '../ts/interfaces.js';
 import { ILocation } from './Locaion.js';
 import { IPublicPlace } from './PublicPlace.js';
 
@@ -44,6 +44,15 @@ export interface IRealEstate {
   publicPlace_5_time: string;
   publicPlace_6: IPublicPlace | ObjectId;
   publicPlace_6_time: string;
+}
+
+export interface IRealEstateWithImages extends Omit<IRealEstate, 'mainImage' | 'images'> {
+  mainImage: {
+    url: string;
+  },
+  images: {
+    url: string;
+  }[],
 }
 
 export const RealEstateSchema = new Schema<IRealEstate>({

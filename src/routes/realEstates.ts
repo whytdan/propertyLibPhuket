@@ -1,131 +1,42 @@
 import express from 'express';
-import {
-  RealEstate,
-  RealEstateSchema,
-  IRealEstate,
-} from '../models/RealEstate.js';
-import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { env } from '../env.js';
-import { FilterQuery } from 'mongoose';
-
-const s3ClientParams = { region: env.AWS_REGION };
-const s3Client = new S3Client(s3ClientParams);
+import { RealEstate } from '../models/RealEstate.js';
+import { filterSchema } from '../schemas/filter.schema.js';
+import { createFilterQuery } from '../utils/creaeteFilterQuery.js';
+import { formatRealEstate } from '../utils/formatRealEstate.js';
+import zodQueryValidatorMildderware from '../middlewares/zodQueryValidator.middleware copy.js';
 
 const router = express.Router();
 
 /* GET realEstates listing. */
-router.get('/', async function (req, res) {
-  try {
-    const query: FilterQuery<IRealEstate> & {
-      _page?: number;
-      _limit?: number;
-      [key: string]: any;
-    } = {};
+router.get(
+  '/',
+  zodQueryValidatorMildderware(filterSchema),
+  async function (req, res) {
+    try {
+      const query = filterSchema.parse(req.query);
 
-    // Get the list of fields from the schema
-    const allowedFields = Object.keys(RealEstateSchema.paths);
+      const filterQuery = createFilterQuery(query);
+      // Pagination
+      const skip = (query._page - 1) * query._limit;
+      const realEstates = await RealEstate.find(filterQuery)
+        .populate('location')
+        .populate('publicPlace_1')
+        .populate('publicPlace_2')
+        .populate('publicPlace_3')
+        .populate('publicPlace_4')
+        .populate('publicPlace_5')
+        .populate('publicPlace_6')
+        .skip(skip)
+        .limit(query._limit);
 
-    // Filter by query parameters
-    for (const [key, value] of Object.entries(req.query)) {
-      if (typeof value !== 'string') continue;
+      const realEstatesWithDecryptedImages = await Promise.all(realEstates.map(formatRealEstate));
 
-      const baseField = key.replace(/_(gte|lte)$/, ''); // Extract base field name
-      if (key.startsWith('price')) {
-        if (key === 'price_gte') {
-          query.priceMillionBahtFrom = { $gte: value };
-        }
-        if (key === 'price_lte') {
-          query.priceMillionBahtTo = { $lte: value };
-        }
-      }
-      else if (allowedFields.includes(baseField)) {
-        // Check for special filters like _gte and _lte
-
-        if (key.endsWith('_gte')) {
-          if (!query[baseField]) query[baseField] = {};
-          query[baseField].$gte = value;
-        }
-        else if (key.endsWith('_lte')) {
-          if (!query[baseField]) query[baseField] = {};
-          query[baseField].$lte = value;
-        }
-        else if (key !== '_page' && key !== '_limit') {
-          (query as any)[key] = value;
-        }
-      }
+      res.json(realEstatesWithDecryptedImages);
+    } catch (error) {
+      console.error(`error in realEstates: ${error}`);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-
-    // Pagination
-    const page = parseInt(req.query._page as string) || 1;
-    const limit = parseInt(req.query._limit as string) || 10;
-    const skip = (page - 1) * limit;
-    const realEstates = await RealEstate.find(query)
-      .populate('location')
-      .populate('publicPlace_1')
-      .populate('publicPlace_2')
-      .populate('publicPlace_3')
-      .populate('publicPlace_4')
-      .populate('publicPlace_5')
-      .populate('publicPlace_6')
-      .skip(skip)
-      .limit(limit);
-
-    const realEstatesWithDecryptedImagesPromises = realEstates.map(
-      async (realEstate) => {
-        const mainImageParams = {
-          Bucket: realEstate.mainImage.bucket,
-          Key: realEstate.mainImage.key,
-        };
-
-        const mainImageCommand = new GetObjectCommand(mainImageParams);
-        const mainImageUrl = await getSignedUrl(s3Client, mainImageCommand);
-
-        const decryptedImagesPromises = realEstate?.images?.key?.length
-          ? realEstate.images.key.map(async (key) => {
-            if (key) {
-              const imageParams = {
-                Bucket: env.AWS_BUCKET,
-                Key: key,
-              };
-
-              const command = new GetObjectCommand(imageParams);
-              const url = await getSignedUrl(s3Client, command);
-
-              return {
-                url,
-              };
-            } else {
-              return {
-                url: '',
-              };
-            }
-          })
-          : [];
-
-        const realEstateImages = await Promise.all(decryptedImagesPromises);
-
-        return {
-          ...realEstate.toObject(),
-          mainImage: {
-            url: mainImageUrl,
-            // alt: realEstate.mainImage.alt,
-          },
-          images: realEstateImages,
-        };
-      }
-    );
-
-    const realEstatesWithDecryptedImages = await Promise.all(
-      realEstatesWithDecryptedImagesPromises
-    );
-
-    res.json(realEstatesWithDecryptedImages);
-  } catch (error) {
-    console.error(`error in realEstates: ${error}`);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+  });
 
 /* GET realEstate by id */
 router.get('/:id', async function (req, res) {
@@ -147,41 +58,7 @@ router.get('/:id', async function (req, res) {
       return res.status(404).json({ error: 'Real estate not found' });
     }
 
-    // If mainImage exists, get the signed URL
-    let mainImageUrl = '';
-    if (realEstate.mainImage) {
-      const mainImageParams = {
-        Bucket: realEstate.mainImage.bucket,
-        Key: realEstate.mainImage.key,
-      };
-      const mainImageCommand = new GetObjectCommand(mainImageParams);
-      mainImageUrl = await getSignedUrl(s3Client, mainImageCommand);
-    }
-
-    // If other images exist, get their signed URLs
-    const realEstateImages = [];
-    if (realEstate?.images?.key?.length) {
-      for (let key of realEstate.images.key) {
-        const imageParams = {
-          Bucket: env.AWS_BUCKET,
-          Key: key,
-        };
-        const command = new GetObjectCommand(imageParams);
-        const url = await getSignedUrl(s3Client, command);
-        realEstateImages.push({ url });
-      }
-    }
-
-    // Construct the response object
-    const responseObj = {
-      ...realEstate.toObject(),
-      mainImage: {
-        url: mainImageUrl,
-      },
-      images: realEstateImages,
-    };
-
-    res.json(responseObj);
+    res.json(formatRealEstate(realEstate));
   } catch (error) {
     console.error(
       `Error fetching real estate with ID ${req.params.id}: ${error}`
@@ -189,14 +66,5 @@ router.get('/:id', async function (req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-/* POST realEstate creation */
-router.post('/', function (req, res) {});
-
-/* PATCH updating realEstate */
-router.patch('/:id', function (req, res) {});
-
-/* DELETE updating realEstate */
-router.delete('/:id', function (req, res) {});
 
 export default router;

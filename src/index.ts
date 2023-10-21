@@ -13,7 +13,6 @@ import { env } from './env.js';
 
 import realEstatesRouter from './routes/realEstates.js';
 import locationsRouter from './routes/locations.js';
-import getAllTopObjectsRouter from './routes/getAllTopObjects.js';
 import { PublicPlaceResource } from './resources/PublicPlaceResource.js';
 
 AdminJS.registerAdapter({
@@ -97,7 +96,6 @@ const start = async () => {
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/realEstates', realEstatesRouter);
   app.use('/locations', locationsRouter);
-  app.use('/getAllTopObjects', getAllTopObjectsRouter);
 
   app.listen(env.PORT, () => {
     console.log('Server Started');
