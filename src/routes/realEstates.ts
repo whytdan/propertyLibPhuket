@@ -60,7 +60,7 @@ router.get('/:id', async function (req, res) {
       return res.status(404).json({ error: 'Real estate not found' });
     }
 
-    res.json(formatRealEstate(realEstate));
+    res.json(await formatRealEstate(realEstate));
   } catch (error) {
     console.error(
       `Error fetching real estate with ID ${req.params.id}: ${error}`
