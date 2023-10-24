@@ -27,6 +27,7 @@ const booleanParamSchema = z.preprocess((val) => {
 export const filterSchema = z.object({
   _page: numberParamSchema.default(1),
   _limit: numberParamSchema.default(10),
+  isRent: booleanParamSchema,
   isVilla: booleanParamSchema,
   isApartment: booleanParamSchema,
   isPriorityBuilding: booleanParamSchema,
@@ -41,23 +42,5 @@ export const filterSchema = z.object({
   price_lte: numberParamSchema,
 });
 
-
-
-export type _Filter = {
-  _page: number,
-  _limit: number,
-  isVilla: boolean,
-  isApartment: boolean,
-  isPriorityBuilding: boolean,
-  location: string,
-  badroomsAmount_gte: number,
-  badroomsAmount_lte: number,
-  builtUpArea_gte: number,
-  builtUpArea_lte: number,
-  landArea_gte: number,
-  landArea_lte: number,
-  price_gte: number,
-  price_lte: number,
-};
 
 export type FilterParams = z.infer<typeof filterSchema>;

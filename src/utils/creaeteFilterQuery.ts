@@ -9,9 +9,10 @@ type Query = FilterQuery<IRealEstate> & {
 
 export const createFilterQuery = (params: FilterParams): Query => {
   return {
+    isRent: params.isRent,
     isVilla: params.isVilla,
-    isApartment: params.isApartment,
     location: params.location,
+    isApartment: params.isApartment,
     badroomsAmountFrom: {
       $gte: params.badroomsAmount_gte,
     },
