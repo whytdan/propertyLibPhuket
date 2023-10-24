@@ -13,8 +13,8 @@ router.get(
   zodQueryValidatorMildderware(filterSchema),
   async function (req, res) {
     try {
-      const query = filterSchema.parse(req.query);
 
+      const query = filterSchema.parse(req.query);
       const filterQuery = createFilterQuery(query);
       const realEstates = await RealEstate.find(filterQuery)
         .populate('location')
@@ -54,7 +54,7 @@ router.get('/:id', async function (req, res) {
       return res.status(404).json({ error: 'Real estate not found' });
     }
 
-    res.json(formatRealEstate(realEstate));
+    res.json(await formatRealEstate(realEstate));
   } catch (error) {
     console.error(
       `Error fetching real estate with ID ${req.params.id}: ${error}`
