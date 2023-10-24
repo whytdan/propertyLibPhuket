@@ -2,10 +2,7 @@ import { FilterQuery } from "mongoose";
 import { IRealEstate } from "../models/RealEstate.js";
 import { FilterParams } from "../schemas/filter.schema.js";
 
-type Query = FilterQuery<IRealEstate> & {
-  _page?: number;
-  _limit?: number;
-}
+type Query = FilterQuery<IRealEstate>
 
 export const createFilterQuery = (params: FilterParams): Query => {
   return {

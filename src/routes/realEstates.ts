@@ -16,8 +16,6 @@ router.get(
       const query = filterSchema.parse(req.query);
 
       const filterQuery = createFilterQuery(query);
-      // Pagination
-      const skip = (query._page - 1) * query._limit;
       const realEstates = await RealEstate.find(filterQuery)
         .populate('location')
         .populate('publicPlace_1')
@@ -25,9 +23,7 @@ router.get(
         .populate('publicPlace_3')
         .populate('publicPlace_4')
         .populate('publicPlace_5')
-        .populate('publicPlace_6')
-        .skip(skip)
-        .limit(query._limit);
+        .populate('publicPlace_6');
 
       const realEstatesWithDecryptedImages = await Promise.all(realEstates.map(formatRealEstate));
 
