@@ -25,8 +25,6 @@ const booleanParamSchema = z.preprocess((val) => {
 }, z.boolean().optional());
 
 export const filterSchema = z.object({
-  _page: numberParamSchema.default(1),
-  _limit: numberParamSchema.default(10),
   isRent: booleanParamSchema,
   isVilla: booleanParamSchema,
   isApartment: booleanParamSchema,
