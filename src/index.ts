@@ -9,11 +9,14 @@ import swaggerDocument from '../swagger.json' assert { type: 'json' };
 import { componentLoader } from './utils/componentLoader.js';
 import { RealEstateResource } from './resources/RealEstateResource.js';
 import { LocationResource } from './resources/LocationResource.js';
-import { env } from './env.js';
+import { PublicPlaceResource } from './resources/PublicPlaceResource.js';
 
 import realEstatesRouter from './routes/realEstates.js';
 import locationsRouter from './routes/locations.js';
-import { PublicPlaceResource } from './resources/PublicPlaceResource.js';
+import amoCrmRouter from './routes/amocrm.js';
+import leadsRouter from './routes/leads.js';
+
+import { env } from './env.js';
 
 AdminJS.registerAdapter({
   Resource,
@@ -96,6 +99,8 @@ const start = async () => {
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/realEstates', realEstatesRouter);
   app.use('/locations', locationsRouter);
+  app.use('/amocrm', amoCrmRouter);
+  app.use('/leads', leadsRouter);
 
   app.listen(env.PORT, () => {
     console.log('Server Started');
