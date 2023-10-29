@@ -53,8 +53,8 @@ amoCrmRouter.get("/redirect", async function (req, res) {
 
 amoCrmRouter.get("/login", async function (req, res) {
   const loginUrl = await getOAuthUrl();
-  // res.redirect(loginUrl);
-  res.send({ loginUrl });
+  res.redirect(loginUrl);
+  // res.send({ loginUrl });
 });
 
 export default amoCrmRouter;
