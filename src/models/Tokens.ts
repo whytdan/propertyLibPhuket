@@ -8,7 +8,6 @@ export interface ITokens {
 
   token_type: string;
   expires_in: number;
-  expires_at?: number;
 }
 
 export const TokensSchema = new Schema<ITokens>({
@@ -18,7 +17,6 @@ export const TokensSchema = new Schema<ITokens>({
 
   token_type: { type: String, required: true, maxLength: 255 },
   expires_in: { type: Number, required: true },
-  expires_at: { type: Number, required: false },
 });
 
 export const Tokens = model<ITokens>('Tokens', TokensSchema);

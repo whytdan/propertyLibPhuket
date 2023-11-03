@@ -4,7 +4,7 @@ import zodValidatorMildderware from "../middlewares/zodValidator.middleware.js";
 import { amoCrmAxios } from "../services/index.js";
 import { isAxiosError } from "axios";
 
-const router = express.Router();
+const leadsRouter = express.Router();
 
 const leadSchema = z.object({
   fullName: z.string(),
@@ -16,9 +16,19 @@ const leadSchema = z.object({
   other: z.boolean(),
 });
 
+// const data = {
+//   "fullName": "Test 123",
+//   "phoneNumber": "996555555555",
+//   "comment": "Test 123",
+//   "buy": true,
+//   "post": true,
+//   "rent": true,
+//   "other": true
+// }
+
 const customContactFields = {
   phoneNumber: {
-    id: 101595,
+    id: 101593,
     field_name: "Телефон",
     enums: {
       WORK: 55255,
@@ -37,41 +47,103 @@ const customContactFields = {
       PRIV: 55269,
       OTHER: 55271,
     },
-  },
+  }
 };
 
-router.post(
+const customLeadFields = {
+  comment: {
+    id: 356807,
+    field_name: "Комментарий",
+  },
+  type: {
+    id: 356809,
+    field_name: "Тип сделки",
+    enums: {
+      BUY: 197071,
+      POST: 440111,
+      RENT: 440113,
+      OTHER: 440115,
+    },
+  },
+}
+
+const tags = {
+  site: 18485,
+} as const
+
+type CreateContactResponse = {
+  _embedded: {
+    contacts: { id: number }[]
+  },
+}
+
+leadsRouter.post(
   "/",
   zodValidatorMildderware(leadSchema),
   async function (req, res) {
     const body = req.body as z.infer<typeof leadSchema>;
     try {
-      const { data: contact } = await amoCrmAxios.post("/contacts", {
-        name: [body.fullName],
-        first_name: [body.fullName],
-        custom_fields_values: [
+      const contact = await amoCrmAxios.post<CreateContactResponse>("/contacts",
+        [
           {
-            field_id: customContactFields.phoneNumber.id,
-            values: [
+            name: body.fullName,
+            custom_fields_values: [
               {
-                value: body.phoneNumber,
-                enum_id: customContactFields.phoneNumber.enums.WORK,
-              },
-              {
-                value: body.comment,
-                enum_id: customContactFields.phoneNumber.enums.WORK,
+                field_id: customContactFields.phoneNumber.id,
+                values: [
+                  {
+                    value: body.phoneNumber,
+                    enum_id: customContactFields.phoneNumber.enums.WORK,
+                  }
+                ],
               },
             ],
-          },
-        ],
-      });
+            _embedded: {
+              tags: [
+                { id: tags.site },
+              ]
+            }
+          }
+        ]).then((res) => res.data._embedded.contacts[0] ?? null);
 
-      const { data } = await amoCrmAxios.post("/leads", {
-        name: [body.fullName],
-        account_id: contact?.account_id,
-      });
+      if (!contact) return res.status(500).json({ error: "Internal Server Error" });
 
-      console.log("response:", data);
+      console.log("contact:", JSON.stringify(contact, null, 2));
+
+      const types: { enum_id: number }[] = [];
+      if (body.buy) types.push({ enum_id: customLeadFields.type.enums.BUY });
+      if (body.post) types.push({ enum_id: customLeadFields.type.enums.POST });
+      if (body.rent) types.push({ enum_id: customLeadFields.type.enums.RENT });
+      if (body.other) types.push({ enum_id: customLeadFields.type.enums.OTHER });
+
+      const { data } = await amoCrmAxios.post("/leads", [
+        {
+          name: body.fullName,
+          custom_fields_values: [
+            {
+              field_id: customLeadFields.comment.id,
+              values: [{ value: body.comment }],
+            },
+            {
+              field_id: customLeadFields.type.id,
+              values: types,
+            },
+          ],
+          _embedded: {
+            contacts: [
+              {
+                id: contact.id,
+                is_main: true,
+              }
+            ],
+            tags: [
+              { id: tags.site },
+            ]
+          }
+        }
+      ]);
+
+      console.log("response:", JSON.stringify(data, null, 2));
 
       res.json(data);
     } catch (error) {
@@ -87,37 +159,4 @@ router.post(
   }
 );
 
-router.get("/", async function (req, res) {
-  try {
-    const { data } = await amoCrmAxios.get("/leads");
-    res.json(data);
-  } catch (error) {
-    console.error(`error in lead list request: ${error}`);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-router.get("/custom_fields", async function (req, res) {
-  try {
-    console.log("get custom fields");
-    const { data: leadsCustomFields } = await amoCrmAxios.get(
-      "/leads/custom_fields"
-    );
-    const { data: contactsCustomFields } = await amoCrmAxios.get(
-      "/contacts/custom_fields"
-    );
-    const { data: companiesCustomFields } = await amoCrmAxios.get(
-      "/companies/custom_fields"
-    );
-    res.json({
-      leadsCustomFields,
-      contactsCustomFields,
-      companiesCustomFields,
-    });
-  } catch (error) {
-    console.error(`error in lead custom fields request: ${error}`);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-export default router;
+export default leadsRouter;

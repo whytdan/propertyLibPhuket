@@ -1,7 +1,6 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { env } from '../env.js';
-import amoCrmClient from './amoCrmClient.js';
-import { Tokens } from '../models/Tokens.js';
+import { getTokens, refreshTokens } from './amoUtils.js';
 
 export const amoCrmAxios = axios.create({
   baseURL: `https://${env.AMO_CRM_DOMAIN}/api/v4`,
@@ -11,11 +10,11 @@ export const amoCrmAxios = axios.create({
   },
 });
 
-amoCrmAxios.interceptors.request.use((config) => {
+amoCrmAxios.interceptors.request.use(async (config) => {
   try {
-    const tokens = amoCrmClient.token.getValue();
-    if (tokens) {
-      config.headers['Authorization'] = `Bearer ${tokens.access_token}`;
+    const dbTokens = await getTokens().catch(() => null);
+    if (dbTokens) {
+      config.headers['Authorization'] = `Bearer ${dbTokens.access_token}`;
     }
     return config;
   } catch (error) {
@@ -27,45 +26,22 @@ amoCrmAxios.interceptors.request.use((config) => {
 amoCrmAxios.interceptors.response.use(
   response => response,
   async (error) => {
+    if (!isAxiosError(error)) return Promise.reject(error);
     try {
-      if (error.response.status === 401) {
-        const dbTokens = await Tokens.findOne({ slug: 'admin' });
-        console.log('dbTokens:', dbTokens?.toJSON());
+      if (error.response?.status === 401) {
+        const tokens = await refreshTokens().catch(() => null);
+        if (!tokens) return Promise.reject(error);
+        console.log("Tokens Refreshed!!");
+        const subResponse = await axios.request({
+          ...(error.config ?? {}),
+          headers: {
+            ...(error.config?.headers ?? {}),
+            Authorization: `Bearer ${tokens.access_token}`,
+          }
+        });
+        console.log("subResponse", subResponse.data);
 
-        if (dbTokens) {
-          amoCrmClient.token.setValue({
-            access_token: dbTokens.access_token,
-            refresh_token: dbTokens.refresh_token,
-            token_type: dbTokens.token_type,
-            expires_in: dbTokens.expires_in,
-            expires_at: dbTokens.expires_at,
-          });
-          console.log('amoCrmClient.token.getValue():', amoCrmClient.token.getValue());
-        }
-
-        try {
-          await amoCrmClient.token.refresh();
-        } catch (error) {
-
-        }
-        const tokens = amoCrmClient.token.getValue();
-
-        if (!tokens) {
-          return Promise.reject(error);
-        }
-
-        console.log('tokens:', tokens)
-
-        await Tokens.findOneAndUpdate({ slug: 'admin' }, {
-          access_token: tokens.access_token,
-          refresh_token: tokens.refresh_token,
-          token_type: tokens.token_type,
-          expires_in: tokens.expires_in,
-          expires_at: tokens.expires_at,
-        }, { upsert: true });
-
-        error.config.headers['Authorization'] = `Bearer ${tokens.access_token}`;
-        return axios.request(error.config);
+        return Promise.resolve(subResponse);
       }
       return Promise.reject(error);
     } catch (e) {

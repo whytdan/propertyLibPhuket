@@ -24,6 +24,7 @@ export const env = createEnv({
     AMO_CRM_CLIENT_ID: z.string().min(1),
     AMO_CRM_CLIENT_SECRET: z.string().min(1),
     AMO_CRM_REDIRECT_URL: z.string().min(1),
+    AMO_CRM_CODE: z.string().optional(),
   },
 
   runtimeEnv: {
@@ -45,6 +46,7 @@ export const env = createEnv({
     AMO_CRM_CLIENT_ID: process.env.AMO_CRM_CLIENT_ID,
     AMO_CRM_CLIENT_SECRET: process.env.AMO_CRM_CLIENT_SECRET,
     AMO_CRM_REDIRECT_URL: process.env.AMO_CRM_REDIRECT_URL,
+    AMO_CRM_CODE: process.env.AMO_CRM_CODE,
   }
 })
 
