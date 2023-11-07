@@ -44,6 +44,8 @@ export interface IRealEstate {
   publicPlace_5_time: string;
   publicPlace_6: IPublicPlace | ObjectId;
   publicPlace_6_time: string;
+
+  showInTelegramBot: boolean;
 }
 
 export interface IRealEstateWithImages extends Omit<IRealEstate, 'mainImage' | 'images'> {
@@ -97,6 +99,8 @@ export const RealEstateSchema = new Schema<IRealEstate>({
   publicPlace_5_time: { type: String, default: '20 минут' },
   publicPlace_6: { type: Schema.Types.ObjectId, ref: 'PublicPlace' },
   publicPlace_6_time: { type: String, default: '20 минут' },
+
+  showInTelegramBot: { type: Boolean, default: false },
 });
 
 export const RealEstate = model<IRealEstate>('RealEstate', RealEstateSchema);

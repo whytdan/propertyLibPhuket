@@ -126,6 +126,7 @@ export const RealEstateResource: ResourceWithOptions = {
       publicPlace_5_time: { type: 'string', description: 'Время' },
       publicPlace_6: { type: 'reference', description: 'Место по близости 6' },
       publicPlace_6_time: { type: 'string', description: 'Время' },
+      showInTelegramBot: { type: 'boolean', description: 'Показывать в телеграм боте' },
       ...imagePropertiesFor('mainImage'),
       ...imagePropertiesFor('images', { isArray: true }),
     },
