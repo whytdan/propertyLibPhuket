@@ -17,6 +17,8 @@
     "@adminjs/express": "^6.0.1",
     "@adminjs/mongoose": "^4.0.0",
     "@adminjs/upload": "^4.0.1",
+    "@aws-sdk/client-s3": "^3.441.0",
+    "@aws-sdk/s3-request-presigner": "^3.441.0",
     "adminjs": "^7.2.2",
     "amocrm-js": "^3.4.2",
     "aws-sdk": "^2.1466.0",

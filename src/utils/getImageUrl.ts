@@ -1,4 +1,3 @@
-
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { env } from '../env.js';
@@ -14,12 +13,12 @@ export const getImageUrl = async (key: string): Promise<string | null> => {
     };
 
     const command = new GetObjectCommand(imageParams);
-    const url = await getSignedUrl(s3Client, command).catch((error) => {
+    const url = await getSignedUrl(s3Client, command).catch((error: any) => {
       return null;
     });
 
     return url;
-  } catch (error) {
+  } catch (error: any) {
     return null;
   }
-}
+};
